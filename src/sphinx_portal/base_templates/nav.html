@@ -1,0 +1,51 @@
+{% load static %}
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1EAFE7;">
+
+<div class = 'container-fluid'>
+  <a class="navbar-brand btn font-weight-bold" href="{% url 'home' %}"><i class="fa fa-github-alt"></i>  Sphinx</a>
+
+  <!-- Collapse button -->
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+    aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Collapsible content -->
+  <div class="collapse navbar-collapse " id="basicExampleNav">
+
+    <!-- Links -->
+
+    <ul class="navbar-nav ml-auto">
+
+    {% if user.is_authenticated %}
+        <li class="nav-item dropdown">
+            <a class="nav-link nav-item dropdown-toggle font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
+                {{user.first_name}} {{user.last_name}}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item nav-link nav-item text-primary" href="javascript:{document.getElementById('logout').submit()}">
+                    <i class="fa fa-lock"></i>  Log Out
+                </a>
+            </div>
+            <form id='logout' method="POST" action="">
+                {% csrf_token %}
+                <input type="hidden">
+            </form>
+        </li>
+
+    {% else %}
+        <li class="nav-item">
+                <a href="" class="nav-link" data-toggle="modal" data-target="#modalLoginForm"><i class="fa fa-user"></i> Login</a>
+        </li>
+        <li class="nav-item">
+            <a href="" class="nav-link" data-toggle="modal" data-target="#modalRegisterForm"> <i class="fa fa-user-plus"></i> Register</a>
+        </li>
+    {% endif %}
+
+    </ul>
+
+    <!-- Links -->
+  </div>
+  <!-- Collapsible content -->
+</div>
+</nav>
