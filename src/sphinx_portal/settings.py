@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts'
+    'accounts',
+    'quiz',
+    'admin_panel'
 ]
 
 MIDDLEWARE = [
@@ -58,6 +60,8 @@ TEMPLATES = [
         'DIRS': [
             os.path.join(BASE_DIR, 'sphinx_portal', 'base_templates'),
             os.path.join(BASE_DIR, 'accounts', 'account_templates'),
+            os.path.join(BASE_DIR, 'quiz', 'quiz_templates'),
+            os.path.join(BASE_DIR, 'admin_panel', 'admin_templates'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
