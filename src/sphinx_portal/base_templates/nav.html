@@ -27,7 +27,7 @@
                     <i class="fa fa-lock"></i>  Log Out
                 </a>
             </div>
-            <form id='logout' method="POST" action="">
+            <form id='logout' method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <input type="hidden">
             </form>

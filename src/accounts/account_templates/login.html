@@ -1,27 +1,20 @@
 {% extends 'base.html' %}
 {% block  body %}
 
-<div class="row p-4 justify-content-center">
+<div class="row m-5 p-4 justify-content-center">
 <div class="col-4">
-    <!-- Default form login -->
-<form class="text-center border border-light p-5">
-
+    <!-- Login Form -->
+<form class="text-center border border-light p-5" method="post" action="{% url 'login' %}">
+    {% csrf_token %}
     <p class="h4 mb-4">Sign in</p>
 
-    <!-- Email -->
-    <input type="email" id="defaultLoginFormEmail" class="form-control mb-4" placeholder="E-mail">
+    <!-- Username -->
+    <input type="text" class="form-control mb-4" placeholder="Username" name="username" required>
 
     <!-- Password -->
-    <input type="password" id="defaultLoginFormPassword" class="form-control mb-4" placeholder="Password">
+    <input type="password" class="form-control mb-4" placeholder="Password" name="password" required>
 
     <div class="d-flex justify-content-around">
-        <div>
-            <!-- Remember me -->
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="defaultLoginFormRemember">
-                <label class="custom-control-label" for="defaultLoginFormRemember">Remember me</label>
-            </div>
-        </div>
         <div>
             <!-- Forgot password -->
             <a href="">Forgot password?</a>
@@ -33,7 +26,7 @@
 
     <!-- Register -->
     <p>Not a member?
-        <a href="">Register</a>
+        <a href="{% url 'register' %}">Register</a>
     </p>
 
     <!-- Social login -->
@@ -53,7 +46,7 @@
     </a>
 
 </form>
-<!-- Default form login -->
+<!-- form login -->
 </div>
 </div>
 {% endblock %}

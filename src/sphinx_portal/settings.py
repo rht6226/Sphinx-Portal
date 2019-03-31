@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Custom User model
+AUTH_USER_MODEL = 'accounts.User'
+
 
 # Application definition
 
@@ -39,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'quiz',
-    'admin_panel'
+    'admin_panel',
 ]
 
 MIDDLEWARE = [
