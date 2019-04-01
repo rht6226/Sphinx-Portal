@@ -1,13 +1,61 @@
 {%  extends 'base.html' %}
+{% block custom_css %}
+    <style>
+    #snackbar {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 2px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    right:0;
+    bottom: 30px;
+    font-size: 17px;
+}
+
+#snackbar.show {
+    visibility: visible;
+    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+@-webkit-keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+    from {bottom: 0; opacity: 0;}
+    to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+    from {bottom: 30px; opacity: 1;}
+    to {bottom: 0; opacity: 0;}
+}
+
+    </style>
+{% endblock %}
 {%  block body %}
 
 
 
     <div class="container">
+
         <br>
         <br>
         <h1 style="text-align: center">Add Questions</h1>
      <div class="card">
+
            <div class="card-header" style="text-align: center">
         {{quiz_data.quiz_name }}
            </div>
@@ -101,6 +149,9 @@
 
     </div>
 
+        <div id="snackbar">Question submitted successfully!</div>
+
+
 {% endblock %}
 {% block  custom_script %}
 
@@ -127,6 +178,11 @@
 
     });
 
+function snackBar() {
+    var x = document.getElementById("snackbar");
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
 
 
   $(document).on("click","#add",function(e) {
@@ -167,11 +223,10 @@
 
       },
       success: function(data) {
-        alert("Kudos");
+        snackBar();
       }
     });
   });
-
 
 
 
