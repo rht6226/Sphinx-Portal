@@ -1,61 +1,61 @@
 {% extends 'base.html' %}
 {% block body %}
 <!-- Default form register -->
-<div class="row p-3 justify-content-center">
-<div class="col-5">
-<form class="text-center border border-light p-5">
+<div class="row m-5 p-3 justify-content-center">
+    <div class="col-5">
+        <form class="text-center border border-light p-5" method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <p class="h4 mb-4">Sign up</p>
 
-    <p class="h4 mb-4">Sign up</p>
+            <div class="form-row mb-4">
+                <div class="col">
+                    <!-- First name -->
+                    <input type="text" id="FirstName" class="form-control" placeholder="First name" name="first_name" >
+                </div>
+                <div class="col">
+                    <!-- Last name -->
+                    <input type="text" id="LastName" class="form-control" placeholder="Last name" name="last_name" >
+                </div>
+            </div>
+             <!-- username-->
+             <input type="text" id="Username" class="form-control mb-4" placeholder="Username" name="username">
 
-    <div class="form-row mb-4">
-        <div class="col">
-            <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name">
-        </div>
-        <div class="col">
-            <!-- Last name -->
-            <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name">
-        </div>
+            <!-- E-mail -->
+            <input type="email" id="Email" class="form-control mb-4" placeholder="E-mail" name="email">
+
+            <!-- Password -->
+            <input type="password" id="Password" class="form-control mb-4" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" name="password1">
+
+
+            <!--confirm password-->
+             <input type="password" id="Password2" class="form-control" placeholder="Confirm Password" aria-describedby="defaultRegisterFormPasswordHelpBlock" name="password2">
+
+
+
+
+
+
+            <!-- Sign up button -->
+            <button class="btn btn-info my-4 btn-block" type="submit">Sign up!</button>
+
+            <!-- Social register -->
+            <p>or sign up with:</p>
+
+            <a class="light-blue-text mx-2">
+                <i class="fa fa-facebook-f"></i>
+            </a>
+            <a class="light-blue-text mx-2">
+                <i class="fa fa-twitter"></i>
+            </a>
+            <a class="light-blue-text mx-2">
+                <i class="fa fa-linkedin"></i>
+            </a>
+            <a class="light-blue-text mx-2">
+                <i class="fa fa-github"></i>
+            </a>
+
+        </form>
     </div>
-     <!-- username-->
-     <input type="username" id="defaultRegisterFormUsername" class="form-control mb-4" placeholder="Username">
-
-    <!-- E-mail -->
-    <input type="email" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="E-mail">
-
-    <!-- Password -->
-    <input type="password" id="defaultRegisterFormPassword" class="form-control mb-4" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
-    
-
-    <!--confirm password-->
-     <input type="password" id="defaultRegisterFormPassword2" class="form-control" placeholder="Confirm Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
-
-
-    
-
-    
-
-    <!-- Sign up button -->
-    <button class="btn btn-info my-4 btn-block" type="submit">Sign in</button>
-
-    <!-- Social register -->
-    <p>or sign up with:</p>
-
-    <a class="light-blue-text mx-2">
-        <i class="fa fa-facebook-f"></i>
-    </a>
-    <a class="light-blue-text mx-2">
-        <i class="fa fa-twitter"></i>
-    </a>
-    <a class="light-blue-text mx-2">
-        <i class="fa fa-linkedin"></i>
-    </a>
-    <a class="light-blue-text mx-2">
-        <i class="fa fa-github"></i>
-    </a>
-
-</form>
-</div>
 </div>
 <!-- Default form register -->
 {% endblock body %}
