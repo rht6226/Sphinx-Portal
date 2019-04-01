@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
-
+from accounts.models import User
 
 # Model for Quiz
 class Quiz(models.Model):
@@ -16,6 +16,8 @@ class Quiz(models.Model):
     # Quiz info
     description = models.TextField(max_length=400)
     instructions = models.TextField(max_length=400)
+    quizmaster = models.ForeignKey(User, on_delete= models.CASCADE)
+    tags = models.TextField(max_length=2000)
 
     # Automatic info
     is_active = models.BooleanField(default=True)

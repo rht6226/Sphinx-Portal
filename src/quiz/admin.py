@@ -3,12 +3,12 @@ from.models import Quiz, Question
 
 
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ('quiz_id', 'quiz_name', 'quiz_time', 'duration', 'is_active')
+    list_display = ('quiz_id', 'quiz_name', 'quiz_time', 'duration', 'is_active','quizmaster')
     list_filter = ('is_active', 'created_at', 'duration')
     fieldsets = (
         (None, {'fields': ('quiz_id', 'quiz_name', 'quiz_password')}),
         ('Quiz info', {'fields': ('quiz_time', 'duration', 'created_at', 'is_active')}),
-        ('Quiz Description', {'fields': ('description', 'instructions')}),
+        ('Quiz Description', {'fields': ('description', 'instructions', 'quizmaster', 'tags')}),
     )
     ordering = ('quiz_id', 'quiz_name', 'quiz_password', 'quiz_time', 'description', 'instructions')
     filter_horizontal = ()
