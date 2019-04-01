@@ -61,6 +61,7 @@ class Question(models.Model):
     max_words = models.IntegerField(default=1000)
     subjective_answer = models.TextField(max_length=1500, blank=True, default='')
 
+
     # Objective Options
     option_A = models.TextField(max_length=300,  blank=True, default='')
     option_B = models.TextField(max_length=300,  blank=True, default='')

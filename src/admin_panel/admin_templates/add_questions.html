@@ -1,13 +1,183 @@
 {%  extends 'base.html' %}
-{%  block 'body' %}
+{%  block body %}
 
 
 
     <div class="container">
+        <br>
+        <br>
+        <h1 style="text-align: center">Add Questions</h1>
+     <div class="card">
+           <div class="card-header" style="text-align: center">
+        {{quiz_data.quiz_name }}
+           </div>
+         <div class="card-body">
+
+             <form method="POST" action="">
+
+                 {% csrf_token %}
+
+  <div class="form-group get_csrf" csrf="{{ csrf_token }}">
+    <label >Question</label>
+      <textarea type="email" class="form-control" id="question"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Type</label>
+    <select class="form-control" id="typelist">
+        <option value="">Select</option>
+      <option value="s">Subjective</option>
+      <option value="m">Single-Correct</option>
+      <option value="o">Multiple-Correct</option>
+    </select>
+  </div>
+  <div class="form-group single-correct" style="display: none">
+    <label >Option A</label>
+      <input type="email" class="form-control" id="option_a" >
+
+  </div>
+     <div class="form-group single-correct" style="display: none">
+    <label >Option B</label>
+      <input type="email" class="form-control" id="option_b">
+
+  </div>
+                 <div class="form-group single-correct" style="display: none">
+    <label for="exampleFormControlSelect2">Option C</label>
+      <input type="email" class="form-control" id="option_c">
+
+  </div>
+                   <div class="form-group single-correct" style="display: none">
+    <label for="exampleFormControlSelect2">Option D</label>
+      <input type="email" class="form-control" id="option_d">
+
+  </div>
+  <div class="form-group single-correct" style="display: none">
+    <label for="exampleFormControlSelect2">Correct Answer</label>
+      <input type="email" class="form-control" id="obj_ans" placeholder="Use comma to separate multiple answers">
+
+  </div>
+  <div class="form-group subjective" style="display: none">
+    <label for="exampleFormControlTextarea1">Correct Answer</label>
+    <textarea class="form-control" id="sub_ans" rows="3"></textarea>
+  </div>
+
+           <div class="form-group" >
+    <label>Level</label>
+    <select class="form-control" id="levellist">
+        <option value="">Select</option>
+      <option value="e">Easy</option>
+      <option value="m"> Medium</option>
+      <option value="h">Hard</option>
+    </select>
+  </div>
+
+                   <div class="form-group">
+    <label for="exampleFormControlSelect2">Marks</label>
+      <input type="number" class="form-control col-3" id="marks">
+  </div>
+                   <div class="form-group">
+    <label for="exampleFormControlSelect2">Time Limit</label>
+      <input type="number" class="form-control col-3" id="time" placeholder="In minutes">
+
+  </div>
 
 
+</form>
+         </div>
 
+         <div style="text-align: right">
+         <button class="btn btn-primary" id="add">Add</button>
+          </div>
+
+     </div>
+        <br>
+        <div style="text-align: center">
+            <form action="{% url 'finish' %}">
+         <button class="btn btn-default"> Finish </button>
+            </form>
+              </div>
+        <br>
+        <br>
+        <hr>
 
     </div>
+
+{% endblock %}
+{% block  custom_script %}
+
+<script>
+
+    $('#typelist').change(function(){
+
+       var value = $(this).val();
+       if(value=='m')
+       {
+           $(".single-correct").css("display", "block");
+           $(".subjective").css("display", "none");
+       }
+       else if(value=='s')
+       {
+           $(".subjective").css("display", "block");
+           $(".single-correct").css("display", "none");
+       }
+       else if(value=='o')
+       {
+           $(".single-correct").css("display", "block");
+           $(".subjective").css("display", "none");
+       }
+
+    });
+
+
+
+  $(document).on("click","#add",function(e) {
+    e.preventDefault();
+    var csrf = $(".get_csrf").attr("csrf");
+    var type = $("#typelist").val();
+    var marks = $("#marks").val();
+    var  time = $("#time").val();
+    var level = $("#levellist").val();
+    var option_a = $("#option_a").val();
+    var option_b = $("#option_b").val();
+    var option_c = $("#option_c").val();
+    var option_d = $("#option_d").val();
+    var obj_ans = $("#obj_ans").val();
+    var sub_ans = $("#sub_ans").val();
+    var question = $("#question").val();
+
+
+    $.ajax({
+      url: '{% url 'add_questions' quizid=quiz_data.quiz_id %}',
+      data: {
+        type:type,
+        time_limit:time,
+        question : question,
+        level :level,
+        marks: marks,
+        option_a:option_a,
+        option_b:option_b,
+        option_c:option_c,
+        option_d:option_d,
+        correct:obj_ans,
+        subjective_answer:sub_ans,
+        csrfmiddlewaretoken: csrf
+      },
+      type: "post",
+      cache: false,
+      beforeSend: function() {
+
+      },
+      success: function(data) {
+        alert("Kudos");
+      }
+    });
+  });
+
+
+
+
+
+
+</script>
+
 
 {% endblock %}

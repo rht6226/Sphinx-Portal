@@ -1,30 +1,61 @@
 from django.shortcuts import render, redirect
+from django.http import JsonResponse
 from .forms import QuizForm
 from django.contrib import auth, messages
 from django.core.mail import send_mail
-from quiz.models import Quiz
+from quiz.models import Quiz,Question
 import socket
 socket.getaddrinfo('localhost', 8000)
 # Create your views here.
 
+
+
+def finish(request):
+    return render(request,'dashboard.html')
+
+
 def add_questions(request,quizid):
 
-    if request.method == 'POST':
+    user = request.user
+    if user.is_admin():
 
-        return redirect('home')
+      quiz = Quiz.objects.get(quiz_id=quizid)
 
+      if request.method == 'POST':
+
+          type = request.POST.get('type')
+          ques = Question()
+          ques.quiz= quiz
+          ques.type = request.POST.get('type')
+          ques.marks = request.POST.get('marks')
+          ques.level = request.POST.get('level')
+          ques.time_limit = request.POST.get('time_limit')
+          ques.question = request.POST.get('question')
+          print(ques.level)
+
+          if type=='s':
+              ques.subjective_answer = request.POST.get('subjective_answer')
+              ques.save()
+          else:
+              ques.option_A = request.POST.get('option_a')
+              ques.option_B = request.POST.get('option_b')
+              ques.option_C = request.POST.get('option_c')
+              ques.option_D = request.POST.get('option_d')
+              ques.correct = request.POST.get('correct')
+              ques.save()
+          return JsonResponse({'kudos':"kudos"})
+
+      else:
+
+         return render(request,'add_questions.html',{'quiz_data':quiz})
     else:
 
         messages.info(request, 'You do not have the permissions required to edit this quiz')
         return redirect('home')
 
 
-
-
-
-
-
 def create_quiz(request):
+
     user = request.user
     if user.is_admin():
         if request.method == 'POST':
