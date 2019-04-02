@@ -123,3 +123,31 @@ def register(request):
         return render(request, 'register.html', context={'title': 'Register'})
 
 
+# Function for editing profile
+@login_required(login_url='/login/')
+def edit_profile(request):
+    user = request.user
+    user_instance = User.objects.get(username=user.username)
+    context = {'title': 'Edit Profile', 'user': user_instance, "edit_page": "active"}
+
+    if request.method == 'POST':
+
+        if request.FILES.get('image'):
+            user_instance.profile_image = request.FILES.get('image')
+            user_instance.save()
+            return redirect('edit_profile')
+
+        else:
+            user_instance.first_name = request.POST.get('first_name')
+            user_instance.last_name = request.POST.get('last_name')
+            user_instance.registration_number = request.POST.get('registration_number')
+            user_instance.bio = request.POST.get('bio') if request.POST.get('bio') else user.bio
+            user_instance.save()
+            return redirect('edit_profile')
+
+        # else:
+        #     return HttpResponse('Sorry! Something went wrong.')
+
+    else:
+        return render(request, 'edit_profile.html', context=context)
+
