@@ -1,6 +1,13 @@
 {%  extends 'base.html' %}
 {% block custom_css %}
     <style>
+    .reply-count{
+        background-color: #63b1c5;
+        padding: 0px 10px;
+        margin-left: 10px;
+        border-radius: 10px;
+        color: white;
+    }
     #snackbar {
     visibility: hidden;
     min-width: 250px;
@@ -131,7 +138,9 @@
 
 </form>
          </div>
-
+<div style="text-align: left;padding-left: 20px;">
+             <h3><b>Questions Added:</b><span class="reply-count" id="ques_count"></span></h3>
+         </div>
          <div style="text-align: right">
          <button class="btn btn-primary" id="add">Add</button>
           </div>
@@ -157,6 +166,7 @@
 
 <script>
 
+   var ques_count=0;
     $('#typelist').change(function(){
 
        var value = $(this).val();
@@ -229,10 +239,15 @@ function clear_form() {
           // On Successful submission of Quiz, Show a snackbar
           // Clear form Data
           // Reset form to initial state
+        ques_count =ques_count+1;
+
+        $("#ques_count").html(ques_count);
         snackBar();
         clear_form();
         $(".single-correct").css("display", "none");
         $(".subjective").css("display", "none");
+
+
       }
     });
   });
