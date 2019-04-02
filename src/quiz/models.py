@@ -53,7 +53,7 @@ class Question(models.Model):
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
     question = models.TextField(max_length=1000, null=False)
 
-    image = models.ImageField(upload_to='questions')
+    # image = models.ImageField(upload_to='questions')
 
     type = models.CharField(max_length=1, choices=TYPE, default='s')  # type of question as selected by admin
     marks = models.IntegerField(default=4)   # Marks for each Questions
