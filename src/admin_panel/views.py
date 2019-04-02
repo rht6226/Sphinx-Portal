@@ -3,18 +3,16 @@ from django.http import JsonResponse
 from .forms import QuizForm
 from django.contrib import auth, messages
 from django.core.mail import send_mail
-from quiz.models import Quiz,Question
+from quiz.models import Quiz, Question
 import socket
 socket.getaddrinfo('localhost', 8000)
-# Create your views here.
-
 
 
 def finish(request):
-    return render(request,'dashboard.html')
+    return render(request, 'dashboard.html')
 
 
-def add_questions(request,quizid):
+def add_questions(request, quizid):
 
     user = request.user
     if user.is_admin():
@@ -46,8 +44,7 @@ def add_questions(request,quizid):
           return JsonResponse({'kudos':"kudos"})
 
       else:
-
-         return render(request,'add_questions.html',{'quiz_data':quiz})
+          return render(request, 'add_questions.html', {'quiz_data':quiz})
     else:
 
         messages.info(request, 'You do not have the permissions required to edit this quiz')
