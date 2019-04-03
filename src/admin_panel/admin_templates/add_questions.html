@@ -63,12 +63,24 @@
         <h1 style="text-align: center">Add Questions</h1>
      <div class="card">
 
-           <div class="card-header" style="text-align: center">
-        {{quiz_data.quiz_name }}
+           <div class="card-header row" style="text-align: center">
+            <div class="col-md-8 col-4 text-muted" style="font-size: x-large;">{{quiz_data.quiz_name }}</div>
+            <div class="col-md-4 col-4">
+                <div class="dropdown">
+                  <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Add Fields
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" id="add_image" onclick="add_image()">Add Image</a>
+                    <a class="dropdown-item" id="add_code" onclick="add_code()">Add Code</a>
+                    <a class="dropdown-item" id="reset_form" onclick="reset_all()">Reset Form</a>
+                  </div>
+                </div>
+            </div>
            </div>
          <div class="card-body">
 
-             <form method="POST" action="" id="question_form">
+             <form method="POST" action="" id="question_form" enctype="multipart/form-data">
 
                  {% csrf_token %}
 
@@ -85,7 +97,23 @@
       <option value="o">Multiple-Correct</option>
     </select>
   </div>
-  <div class="form-group single-correct" style="display: none">
+    <div class="form-group" id="image_div" style="display: none;">
+        <label for="image">Upload Image if necessary</label>
+        <div class="input-group">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+          </div>
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="image">
+            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+          </div>
+        </div>
+    </div>
+     <div class="form-group" id="code_div" style="display: none;">
+        <label for="code">Code if any</label>
+        <textarea class="form-control" id="code" rows="3" name="code"></textarea>
+     </div>
+ <div class="form-group single-correct" style="display: none">
     <label for="option_a">Option A</label>
       <input type="text" class="form-control" id="option_a" >
 
@@ -194,9 +222,32 @@ function snackBar() {
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
 }
 
+function add_image() {
+    $('#image_div').css("display", "block");
+}
+
+function add_code() {
+    $('#code_div').css("display", "block");
+}
+
 function clear_form() {
     document.getElementById("question_form").reset();
 }
+
+function reset_all() {
+    clear_form();
+    $(".single-correct").css("display", "none");
+    $(".subjective").css("display", "none");
+    $('#image_div').css("display", "none");
+    $('#code_div').css("display", "none");
+}
+
+$('#inputGroupFile01').on('change',function(){
+                //get the file name
+                var fileName = $(this).val();
+                //replace the "Choose a file" label
+                $(this).next('.custom-file-label').html(fileName);
+            })
 
   $(document).on("click","#add",function(e) {
     e.preventDefault();
@@ -212,6 +263,7 @@ function clear_form() {
     var obj_ans = $("#obj_ans").val();
     var sub_ans = $("#sub_ans").val();
     var question = $("#question").val();
+    var code = $("#code").val();
 
 
     $.ajax({
@@ -228,6 +280,7 @@ function clear_form() {
         option_d:option_d,
         correct:obj_ans,
         subjective_answer:sub_ans,
+        code:code,
         csrfmiddlewaretoken: csrf
       },
       type: "post",
@@ -243,18 +296,10 @@ function clear_form() {
 
         $("#ques_count").html(ques_count);
         snackBar();
-        clear_form();
-        $(".single-correct").css("display", "none");
-        $(".subjective").css("display", "none");
-
-
+        reset_all();
       }
     });
   });
-
-
-
-
 
 </script>
 

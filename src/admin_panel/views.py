@@ -34,6 +34,18 @@ def add_questions(request, quizid):
             ques.question = strip_tags(request.POST.get('question'))
             print(ques.level)
 
+            # if Image is uploaded
+            img = request.FILES.get('image')
+            if img:
+                ques.image = img
+            else:
+                print("\n\n\n\nNo File was uploaded\n\n\n\n")
+
+            # if Code is added
+            code = request.POST.get('code')
+            if code:
+                ques.code = code
+
             # if Question is subjective
             if q_type == 's':
                 ques.subjective_answer = strip_tags(request.POST.get('subjective_answer'))

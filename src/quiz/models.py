@@ -53,12 +53,14 @@ class Question(models.Model):
     quiz = models.ForeignKey('Quiz', on_delete=models.CASCADE)
     question = models.TextField(max_length=1000, null=False)
 
-    # image = models.ImageField(upload_to='questions')
-
     type = models.CharField(max_length=1, choices=TYPE, default='s')  # type of question as selected by admin
     marks = models.IntegerField(default=4)   # Marks for each Questions
     time_limit = models.IntegerField(default=3600)  # Time limit for each question default is set to 1 hour
     level = models.CharField(max_length=1, choices=LEVEL, default='m')  # Difficulty level for each question
+
+    # Question Add-ons
+    image = models.ImageField(null=True, blank=True, upload_to='questions/')
+    code = models.TextField(max_length=2000, blank=True, default='')
 
     # Subjective Question
     max_words = models.IntegerField(default=1000)
