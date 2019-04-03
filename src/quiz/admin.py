@@ -16,9 +16,10 @@ class QuizAdmin(admin.ModelAdmin):
 
 class QuesAdmin(admin.ModelAdmin):
     list_display = ('quiz', 'question', 'marks', 'time_limit', 'type', 'level')
-    list_filter = ('quiz', 'level')
+    list_filter = ('quiz', 'level', 'type')
     fieldsets = (
         (None, {'fields': ('quiz', 'type', 'question', 'marks', 'time_limit', 'level')}),
+        ('Add Ons', {'fields': ('image', 'code')}),
         ('If Subjective', {'fields': ('max_words', 'subjective_answer')}),
         ('If Objective', {'fields': ('option_A', 'option_B', 'option_C', 'option_D', 'correct')}),
     )
