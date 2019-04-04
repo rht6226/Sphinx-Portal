@@ -63,10 +63,11 @@
         <h1 style="text-align: center">Add Questions</h1>
      <div class="card">
 
-           <div class="card-header row" style="text-align: center">
-            <div class="col-md-8 col-4 text-muted" style="font-size: x-large;">{{quiz_data.quiz_name }}</div>
-            <div class="col-md-4 col-4">
-                <div class="dropdown">
+           <div class="card-header" style="text-align: center">
+            <div class="row">
+            <div class="col text-muted" style="font-size: x-large;text-align: left">{{quiz_data.quiz_name }}</div>
+            <div class="col">
+                <div class="dropdown" style="float: right;">
                   <button class="btn btn-outline-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Add Fields
                   </button>
@@ -76,6 +77,7 @@
                     <a class="dropdown-item" id="reset_form" onclick="reset_all()">Reset Form</a>
                   </div>
                 </div>
+            </div>
             </div>
            </div>
          <div class="card-body">
@@ -103,9 +105,12 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
           </div>
-          <div class="custom-file">
-            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" name="image">
+
+          <div class="custom-file" csrf="{{ csrf_token }}">
+            <input type="file" class="custom-file-input" id="imageUpload"  name="image">
+
             <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+
           </div>
         </div>
     </div>
@@ -300,6 +305,37 @@ $('#inputGroupFile01').on('change',function(){
       }
     });
   });
+
+    var formdata = new FormData();     
+    $("#imageUpload").on("change", function() {
+        var file = this.files[0];
+        var csrf = $(".get_csrf").attr("csrf");
+
+        if (formdata) {
+
+            formdata.append("image", file);
+            $.ajax({
+                url: '{% url 'add_questions' quizid=quiz_data.quiz_id %}',
+                type: "POST",
+                data: {
+                    formdata,
+                    csrfmiddlewaretoken: csrf,
+
+
+                },
+                processData: false,
+                contentType: "multipart/form-data",
+                 beforeSend: function() {
+         alert("Uploading");
+      },
+                success:function(){
+                   alert("Kudos");
+                }
+            });
+        }                      
+    });
+
+
 
 </script>
 

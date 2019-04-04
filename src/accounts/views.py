@@ -10,7 +10,8 @@ User = get_user_model()
 
 # Function for the home page
 def home(request):
-    return render(request, 'base.html', {'title': 'HOME'})
+    return render(request, 'dashboard.html', {'title': 'HOME'})
+
 
 
 # Function to manage Authentication

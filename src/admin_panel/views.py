@@ -6,6 +6,8 @@ from django.utils.html import strip_tags
 from django.core.mail import send_mail
 from quiz.models import Quiz, Question
 from django.utils.crypto import get_random_string
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 import socket
 import random
 socket.getaddrinfo('localhost', 8000)
@@ -32,11 +34,12 @@ def add_questions(request, quizid):
             ques.level = strip_tags(request.POST.get('level'))
             ques.time_limit = strip_tags(request.POST.get('time_limit'))
             ques.question = strip_tags(request.POST.get('question'))
-            print(ques.level)
+
 
             # if Image is uploaded
             img = request.FILES.get('image')
             if img:
+
                 ques.image = img
             else:
                 print("\n\n\n\nNo File was uploaded\n\n\n\n")
@@ -87,6 +90,7 @@ def create_quiz_id(size):
         create_quiz_id(size)  # If uid already exists recreate uid
 
 
+@login_required(login_url='/accounts/login/')
 def create_quiz(request):
 
     user = request.user
