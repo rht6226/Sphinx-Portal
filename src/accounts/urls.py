@@ -1,10 +1,11 @@
 from django.urls import path
-from .views import home, login_user, register, logout_user, edit_profile
+from .views import home, login_user, register, logout_user, edit_profile, dash
 from django.conf.urls.static import static
 from sphinx_portal import settings
 
 urlpatterns = [
     path(r'', home, name='home'),
+    path('dashboard', dash, name='dashboard'),
     path(r'login', login_user, name='login'),
     path(r'logout', logout_user, name='logout'),
     path(r'register', register, name='register'),

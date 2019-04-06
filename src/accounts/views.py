@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
+from quiz.models import Quiz
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 # get the user model
 User = get_user_model()
@@ -10,8 +12,26 @@ User = get_user_model()
 
 # Function for the home page
 def home(request):
-    return render(request, 'dashboard.html', {'title': 'HOME'})
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    else:
+        return render(request, 'base.html', {'title': 'HOME'})
 
+
+@login_required(login_url = '/accounts/login')
+def dash(request):
+
+    item = Quiz.objects.all().order_by('quiz_name')
+    paginator = Paginator(item, 5)  # Show 1o quizzes per page
+    page = request.GET.get('page', 1)
+    try:
+        item = paginator.get_page(page)
+    except PageNotAnInteger:
+        item = paginator.get_page(1)
+    except EmptyPage:
+        item = paginator.get_page(paginator.num_pages)
+
+    return render(request, 'dashboard.html', {'quiz_object': item})
 
 
 # Function to manage Authentication
@@ -27,7 +47,7 @@ def login_user(request):
         if account is not None:
             print('user found... \n Now logging in')
             login(request, account)
-            return redirect('home')
+            return render(request,'dashboard.html')
 
         else:
             print('Non existing user')

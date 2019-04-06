@@ -4,16 +4,54 @@
 
 
    <link rel="stylesheet" href="{% static 'css/button.css' %}">
+   <link rel="stylesheet" href="{% static 'css/table.css' %}">
+
 
 {% endblock %}
 {% block body %}
 <div class="container">
 
-
     <div class="flex">
+        <a href="{% url 'create_quiz' %}" class="bttn">Start Quiz</a>
       <a href="{% url 'create_quiz' %}" class="bttn">Create Quiz</a>
    </div>
 
+    <hr>
+<div class="table100 ver2 m-b-110">
+					<div class="table100-head">
+						<table>
+							<thead>
+
+								<tr class="row100 head">
+									<th class="cell100 column1">Quiz</th>
+									<th class="cell100 column2">Date</th>
+									<th class="cell100 column3">Time</th>
+									<th class="cell100 column4">Quizmaster</th>
+									<th class="cell100 column5">Start</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+
+					<div class="table100-body js-pscroll">
+						<table>
+							<tbody>
+                              {% for obj in quiz_object %}
+								<tr class="row100 body">
+									<td class="cell100 column1">{{ obj.quiz_name }}</td>
+									<td class="cell100 column2">{{ obj.quiz_time.date }}</td>
+									<td class="cell100 column3">{{ obj.quiz_time.time }}</td>
+									<td class="cell100 column4">{{ obj.quizmaster }}</td>
+									<td class="cell100 column5"><a href="{% url 'instructions' obj.quiz_id  %}">Click Here!</a></td>
+								</tr>
+                              {% endfor %}
+
+
+							</tbody>
+						</table>
+					</div>
+				</div>
 
 </div>
 {% endblock %}
+

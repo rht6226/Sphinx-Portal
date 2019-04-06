@@ -14,7 +14,7 @@ socket.getaddrinfo('localhost', 8000)
 
 
 def finish(request):
-    return render(request, 'dashboard.html')
+    return redirect('dashboard')
 
 
 def add_questions(request, quizid):
