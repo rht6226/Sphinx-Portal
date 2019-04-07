@@ -55,6 +55,7 @@ class Question(models.Model):
 
     type = models.CharField(max_length=1, choices=TYPE, default='s')  # type of question as selected by admin
     marks = models.IntegerField(default=4)   # Marks for each Questions
+    negative = models.IntegerField(default=0)   # Negative marks if any
     time_limit = models.IntegerField(default=3600)  # Time limit for each question default is set to 1 hour
     level = models.CharField(max_length=1, choices=LEVEL, default='m')  # Difficulty level for each question
 

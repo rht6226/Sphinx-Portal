@@ -34,7 +34,7 @@ def add_questions(request, quizid):
             ques.level = strip_tags(request.POST.get('level'))
             ques.time_limit = strip_tags(request.POST.get('time_limit'))
             ques.question = strip_tags(request.POST.get('question'))
-
+            ques.negative = strip_tags(request.POST.get('negative'))
 
             # if Image is uploaded
             img = request.FILES.get('image')

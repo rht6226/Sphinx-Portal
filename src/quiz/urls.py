@@ -1,6 +1,5 @@
 from django.urls import path
-from .views import conduct_quiz ,instructions
-
+from .views import conduct_quiz,instructions
 
 
 urlpatterns = [
