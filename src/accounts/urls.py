@@ -5,7 +5,7 @@ from sphinx_portal import settings
 
 urlpatterns = [
     path(r'', home, name='home'),
-    path('dashboard', dash, name='dashboard'),
+    path(r'dashboard', dash, name='dashboard'),
     path(r'login', login_user, name='login'),
     path(r'logout', logout_user, name='logout'),
     path(r'register', register, name='register'),

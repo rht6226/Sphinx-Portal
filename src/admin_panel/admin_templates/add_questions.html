@@ -158,9 +158,15 @@
     </select>
   </div>
 
-                   <div class="form-group">
-    <label for="marks">Marks</label>
-      <input type="number" class="form-control col-3" value="4" id="marks">
+ <div class="form-group form-row">
+     <div class="col-6 col-md-6">
+        <label for="marks">Marks</label>
+        <input type="number" class="form-control col-6" value="4" id="marks">
+    </div>
+     <div class="col-6 col-md-6">
+        <label for="negative">Negative Marks</label>
+        <input type="number" class="form-control col-6" value="0" id="negative">
+    </div>
   </div>
                    <div class="form-group">
     <label for="time">Time Limit</label>
@@ -259,6 +265,7 @@ $('#inputGroupFile01').on('change',function(){
     var csrf = $(".get_csrf").attr("csrf");
     var type = $("#typelist").val();
     var marks = $("#marks").val();
+    var negative = $("#negative").val();
     var  time = $("#time").val();
     var level = $("#levellist").val();
     var option_a = $("#option_a").val();
@@ -279,6 +286,7 @@ $('#inputGroupFile01').on('change',function(){
         question : question,
         level :level,
         marks: marks,
+        negative: negative,
         option_a:option_a,
         option_b:option_b,
         option_c:option_c,

@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
 
-    registration_number = models.IntegerField(null=True, blank=True)
+    registration_number = models.IntegerField(default=201)
     bio = models.TextField(max_length=500, blank=True, default='')
     profile_image = models.ImageField(null=True, blank=True, upload_to='users/')
 

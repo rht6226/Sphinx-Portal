@@ -3,7 +3,7 @@ from.models import Quiz, Question
 
 
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ('quiz_id', 'quiz_name', 'quiz_time', 'duration', 'is_active','quizmaster')
+    list_display = ('quiz_id', 'quiz_name', 'quiz_time', 'duration', 'is_active', 'quizmaster')
     list_filter = ('is_active', 'created_at', 'duration')
     fieldsets = (
         (None, {'fields': ('quiz_id', 'quiz_name', 'quiz_password')}),
@@ -15,15 +15,15 @@ class QuizAdmin(admin.ModelAdmin):
 
 
 class QuesAdmin(admin.ModelAdmin):
-    list_display = ('quiz', 'question', 'marks', 'time_limit', 'type', 'level')
+    list_display = ('quiz', 'question', 'marks', 'negative', 'time_limit', 'type', 'level')
     list_filter = ('quiz', 'level', 'type')
     fieldsets = (
-        (None, {'fields': ('quiz', 'type', 'question', 'marks', 'time_limit', 'level')}),
+        (None, {'fields': ('quiz', 'type', 'question', 'marks', 'negative', 'time_limit', 'level')}),
         ('Add Ons', {'fields': ('image', 'code')}),
         ('If Subjective', {'fields': ('max_words', 'subjective_answer')}),
         ('If Objective', {'fields': ('option_A', 'option_B', 'option_C', 'option_D', 'correct')}),
     )
-    ordering = ('quiz', 'type', 'question', 'level', 'marks', 'time_limit')
+    ordering = ('quiz', 'type', 'question', 'level', 'marks', 'negative', 'time_limit')
     filter_horizontal = ()
 
 
