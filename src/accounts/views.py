@@ -18,7 +18,7 @@ def home(request):
         return render(request, 'base.html', {'title': 'HOME'})
 
 
-@login_required(login_url = '/accounts/login')
+@login_required(login_url='/accounts/login')
 def dash(request):
 
     item = Quiz.objects.all().order_by('quiz_name')
@@ -31,7 +31,7 @@ def dash(request):
     except EmptyPage:
         item = paginator.get_page(paginator.num_pages)
 
-    return render(request, 'dashboard.html', {'quiz_object': item})
+    return render(request, 'dashboard.html', {'title': 'dashboard', 'quiz_object': item})
 
 
 # Function to manage Authentication
@@ -47,7 +47,10 @@ def login_user(request):
         if account is not None:
             print('user found... \n Now logging in')
             login(request, account)
-            return render(request,'dashboard.html')
+            if request.user.is_admin():
+                return redirect('admin_dashboard')
+            else:
+                return redirect('dashboard')
 
         else:
             print('Non existing user')

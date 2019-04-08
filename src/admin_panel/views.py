@@ -7,14 +7,36 @@ from django.core.mail import send_mail
 from quiz.models import Quiz, Question
 from django.utils.crypto import get_random_string
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import socket
 import random
 socket.getaddrinfo('localhost', 8000)
 
 
+@login_required(login_url='/accounts/login')
+def admin_dash(request):
+    if request.user.is_admin():
+        item = Quiz.objects.all().order_by('quiz_name')
+        paginator = Paginator(item, 5)  # Show 1o quizzes per page
+        page = request.GET.get('page', 1)
+        try:
+            item = paginator.get_page(page)
+        except PageNotAnInteger:
+            item = paginator.get_page(1)
+        except EmptyPage:
+            item = paginator.get_page(paginator.num_pages)
+        context = {'title': 'Admin', 'quiz_object': item}
+
+    else:
+        context = {'title': "Error", 'messages': ['Not an admin', 'Do not even Try']}
+
+    return render(request, 'admin_index.html', context=context)
+
+
 def finish(request):
-    return redirect('dashboard')
+    return redirect('admin_dashboard')
 
 
 def add_questions(request, quizid):
@@ -139,3 +161,36 @@ def create_quiz(request):
     else:
         messages.info(request, 'You do not have the permissions required create a quiz')
         return redirect('home')
+
+
+# Function to edit quiz credentials
+@login_required(login_url='/accounts/login/')
+@transaction.atomic()
+def edit_quiz(request, quizid):
+    user = request.user
+    quiz_instance = Quiz.objects.get(quiz_id=quizid)
+
+    if user.is_admin():
+        if request.method == 'POST':
+
+            quiz_form = QuizForm(request.POST, instance=quiz_instance)
+            if quiz_form.is_valid():
+                quiz_form.save()
+                messages.success(request, 'Your Quiz was successfully updated!')
+                return redirect('admin_dashboard')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            quiz_form = QuizForm(instance=quiz_instance)
+
+        return render(request, 'edit_quiz.html', {
+            'title': "{} - Edit".format(quiz_instance.quiz_name),
+            'quiz_form': quiz_form,
+            'quiz': quiz_instance
+        })
+
+    else:
+        return render(request, 'edit_quiz.html', {
+            'title': "Error",
+            'messages': ["Permissions Denied", "Privilege Not Available!"]
+        })
