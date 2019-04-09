@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.http import JsonResponse
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from .models import Quiz, Question
@@ -67,7 +68,8 @@ def conduct_quiz(request, quizid):
 
                 # Multi correct
                 else:
-                    check_list = request.POST.getlist('multi_answer')
+                    check_list = request.POST.getlist('multi_answer[]')
+                    print(check_list[0])
                     length = len(check_list)
                     if length == 1:
                         answer_object.response_A = check_list[0]
@@ -88,7 +90,8 @@ def conduct_quiz(request, quizid):
                 answer_object.save()
 
             else:
-                messages.info(request, 'You have already attempted that question')
+                context = {'title': 'Error', 'messages': 'You have already attempted this question'}
+                return JsonResponse(context)
 
         else:
             messages.info(request, 'You have already attempted this quiz')
@@ -143,7 +146,7 @@ def register_quiz(request, quizid):
         tags = quiz_instance.tags
         tags_list = tags.split(';')
         # this is to check if the user has registered or not
-        list_sheet = AnswerSheet.objects.filter(contestant = user).filter(quiz = quiz_instance)
+        list_sheet = AnswerSheet.objects.filter(contestant=user).filter(quiz=quiz_instance)
 
         if list_sheet.exists():
             flag = 0

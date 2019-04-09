@@ -38,14 +38,15 @@
                     </div>
                 {% endif %}
 
-          <form method="post" action="{% url 'conduct_quiz' quiz_object.quiz_id %}">
+          <form method="post" action="{% url 'conduct_quiz' quiz_object.quiz_id %}" name="{{ obj.id }}">
             {% csrf_token %}
-            <input type="hidden" value="{{ obj.id }}" name="question_id">
+              <div id="csrf_{{ obj.id }}" csrf="{{ csrf_token }}"></div>
+            <input type="hidden" value="{{ obj.id }}" id="quid_{{ obj.id }}">
 
             {% if obj.is_subjective %}
             <!-- For Subjective Questions -->
             <div id="subjective">
-                <textarea id="textarea" class="form-control mb-4" placeholder="Your Answer" name="subjective_answer"></textarea>
+                <textarea id="textarea_{{ obj.id }}" class="form-control mb-4" placeholder="Your Answer" name="subjective_answer"></textarea>
             </div>
             {% endif %}
 
@@ -54,22 +55,22 @@
             <!-- For Single correct Questions -->
             <div id="single">
                 <div class="custom-control custom-radio mb-4">
-                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="single_answer">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="single_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="single_{{ obj.id }}_option_A">{{ obj.option_A }}</label>
                 </div>
 
                 <div class="custom-control custom-radio mb-4">
-                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="single_answer">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="single_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="single_{{ obj.id }}_option_B">{{ obj.option_B }}</label>
                 </div>
 
                 <div class="custom-control custom-radio mb-4">
-                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="single_answer">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="single_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="single_{{ obj.id }}_option_C">{{ obj.option_C }}</label>
                 </div>
 
                 <div class="custom-control custom-radio mb-4">
-                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="single_answer">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="single_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="single_{{ obj.id }}_option_D">{{ obj.option_D }}</label>
                 </div>
 
@@ -81,22 +82,22 @@
             <!-- For Multiple-Choice Multiple-Correct Questions -->
             <div id="multi">
                 <div class="custom-control custom-checkbox mb-4">
-                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="multi_answer">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="multi_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="multi_{{ obj.id }}_option_A">{{ obj.option_A }}</label>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-4">
-                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="multi_answer">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="multi_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="multi_{{ obj.id }}_option_B">{{ obj.option_B }}</label>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-4">
-                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="multi_answer">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="multi_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="multi_{{ obj.id }}_option_C">{{ obj.option_C }}</label>
                 </div>
 
                 <div class="custom-control custom-checkbox mb-4">
-                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="multi_answer">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="multi_answer_{{ obj.id }}">
                     <label class="custom-control-label" for="multi_{{ obj.id }}_option_D">{{ obj.option_D }}</label>
                 </div>
             </div>
@@ -104,7 +105,7 @@
 
             <div class="row justify-content-end">
                 <div class="col-2">
-                    <button type="submit" class="btn btn-primary btn-md"> Submit </button>
+                    <button type="submit" id="submit_question_{{ obj.id }}" class="btn btn-primary btn-md"> Submit </button>
                 </div>
             </div>
             </form>
@@ -129,4 +130,51 @@
         </div>
 
     </body>
+
+    <script>
+        {% for obj in quiz_data%}
+            // Event listeners for every form
+            $('form[name ="{{obj.id}}"]').on('submit', function(event){
+                event.preventDefault();
+                console.log("form submitted!")
+                let quid = $('#quid_{{ obj.id }}').val();
+                let text = $('#textarea_{{ obj.id }}').val();
+                let res = $('input[name="single_answer_{{obj.id}}"]:checked').val();
+                //let checked = $('input[name="multi_answer_{{ obj.id }}"]:checked').val();
+
+                let checkboxes = new Array();
+                $('input[name="multi_answer_{{ obj.id }}"]:checked').each(function() {
+                   checkboxes.push($(this).val());
+                });
+
+                let csrf = $('#csrf_{{ obj.id }}').attr('csrf');
+
+                submit(quid, text, res, checkboxes, csrf);
+            });
+        {% endfor %}
+
+        // Function to submit forms asynchronously
+        function submit(quid, text, res, check, csrf) {
+            $.ajax({
+                    url: "{% url 'conduct_quiz' quiz_object.quiz_id %}",
+                    data: {
+                        'question_id': quid,
+                        'subjective_answer': text,
+                        'single_answer': res,
+                        'multi_answer[]': check,
+                        'csrfmiddlewaretoken': csrf
+                    },
+                    type: "post",
+                    cache: false,
+                    beforeSend: function () {
+                        // Anything Before sending data can be done here
+                    },
+                    success: function () {
+                        // Anything to be done after submission can be added here
+                    }
+                });
+        };
+
+    </script>
+
 </html>
