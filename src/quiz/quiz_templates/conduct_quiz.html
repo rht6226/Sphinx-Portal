@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block body%}
+{% for obj in quiz_data%}
+                <br>
+
+                   <li>
+                    <a href="#" id="q{{obj.id}}" style=" margin:0px;"  onclick="quesFetch({{ obj.id }})">{{obj.question|truncatechars:50}}</a>
+                   </li>
+
+
+
+                    <div id="back_{{ obj.id }}" >
+                <ul class="list-group" style="display:none; padding-top:20px;" id="{{ obj.id }}" >
+                    <li class="list-group-item">{{obj.question}}</li>
+                         {%if obj.image %}
+                    <li class="list-group-item d-flex justify-content-center" >
+                        <img src="{{obj.image}}" class="img-fluid col-9">
+                    </li>
+                    {% endif %}
+                    {%if obj.code %}
+                    <li class="list-group-item">
+                        <code class="col-4">
+                            {{obj.code|linebreaks}}
+                        </code>
+                    </li>
+                    {% endif %}
+                    <form method="POST" action="" name="{{obj.id}}">
+                        {% csrf_token %}
+                    <input type="hidden"  value="{{obj.id}}" name="question_{{obj.id}}">
+                    <li class="list-group-item">
+                        <input class="col-1" type="radio" value="{{obj.a}}" id="optionA" name="response_{{obj.id}}">
+                        <span class='col-11'>{{obj.option_A}}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="col-1" type="radio" value="{{obj.b}}" id="optionB" name="response_{{obj.id}}">
+                        <span class='col-11'>{{obj.option_B}}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="col-1" type="radio" value="{{obj.c}}" id="optionC" name="response_{{obj.id}}">
+                        <span class='col-11'>{{obj.option_C}}</span>
+                    </li>
+                    <li class="list-group-item">
+                        <input class="col-1" type="radio" value="{{obj.d}}" id="optionD" name="response_{{obj.id}}">
+                        <span class='col-11'>{{obj.option_D}}</span>
+                    </li>
+                    <li class="list-group-item" id="recorded_{{obj.id}}" >
+                        <button type="submit" class="btn btn-primary">Submit </button><span></span>
+                    </li>
+                    </form>
+                </ul>
+                    </div>
+                <br>
+                {% endfor %}
+
+{% endblock %}

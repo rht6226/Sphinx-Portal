@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from .models import Quiz, Question
@@ -9,6 +9,7 @@ from django.utils.timezone import datetime, timedelta
 # Create your views here.
 
 
+@login_required()
 def quiz_auth(request, quizid):
 
     item = Quiz.objects.get(quiz_id=quizid)
@@ -32,11 +33,42 @@ def quiz_auth(request, quizid):
             return redirect('dashboard')
 
 
+def create_answer_table(quiz_object, question_objects, user_object):
+    for question_object in question_objects:
+        list_sheet = get_object_or_404(AnswerSheet, contestant = user_object , quiz = quiz_object)
+        ans = Answer()
+        ans.sheet = list_sheet
+        ans.question = question_object
+        ans.save()
+    return
+
+
 def conduct_quiz(request,quizid):
 
-    return render(request,'conduct_quiz.html')
+    aspirant = request.user
+    item = get_object_or_404(Quiz, quiz_id=quizid)
+    data = Question.objects.filter(quiz=item)
+    list_sheet = get_object_or_404(AnswerSheet, contestant=aspirant, quiz=item)
+    if request.method == 'POST':
+        ques = Question.objects.get(id=request.POST.get('question_id'))
+        answer_object = Answer.objects.get(sheet=list_sheet, question=ques)
+        answer_object.response = request.POST.get('response')
+        answer_object.save()
+
+    querys = []
+    for thing in data:
+        querys.append(thing)
+
+    else:
+        try:
+            answers = get_list_or_404(Answer, sheet = list_sheet)
+        except:
+            create_answer_table(item, data, aspirant)
+
+    return render(request, 'conduct_quiz.html', {'quiz_object': item, 'quiz_data': querys, 'user': aspirant})
 
 
+@login_required()
 def instructions(request,quizid):
 
     try:
@@ -70,6 +102,7 @@ def register_quiz(request, quizid):
         user = request.user
         tags = quiz_instance.tags
         tags_list = tags.split(';')
+        # this is to check if the user has registered or not
         list_sheet = AnswerSheet.objects.filter(contestant = user).filter(quiz = quiz_instance)
 
         if list_sheet.exists():
