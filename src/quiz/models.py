@@ -82,11 +82,11 @@ class Question(models.Model):
 
     @property
     def is_single(self):
-        return self.type == 'o'
+        return self.type == 'm'
 
     @property
     def is_multiple(self):
-        return self.type == 'm'
+        return self.type == 'o'
 
     def __str__(self):
         return self.question

@@ -8,7 +8,7 @@ class QuizAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('quiz_id', 'quiz_name', 'quiz_password')}),
         ('Quiz info', {'fields': ('quiz_time', 'duration', 'created_at', 'is_active')}),
-        ('Quiz Description', {'fields': ('description', 'instructions', 'quizmaster', 'tags','users_appeared')}),
+        ('Quiz Description', {'fields': ('description', 'instructions', 'quizmaster', 'tags', 'users_appeared')}),
     )
     ordering = ('quiz_id', 'quiz_name', 'quiz_password', 'quiz_time', 'description', 'instructions')
     filter_horizontal = ()
