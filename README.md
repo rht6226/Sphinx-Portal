@@ -22,6 +22,8 @@
 |   1.	| User 		    | Account |  AbstractBaseUser               |
 |   2.	| Quiz  	    |   Quiz  |  The Quiz model generalised for all kinds of quizzes.   |
 |   3.	| Questions  	|   Quiz  |  Each Question will be connected to its Quiz and Each question is generalised to contain all kinds of questions. Subjective as well as objective.|
+|   4.  | Answersheet   | Admin Panel | An answersheet for each contestant for every quiz. The Sheet will be created when user registers for the quiz. It will store the marks obtained, time elapsed etc. |
+|   5.  | Answer        | Admin Panel | This model will be used to store answers to the questions as well as time elapsed in each questions |
 
 
 #### Views

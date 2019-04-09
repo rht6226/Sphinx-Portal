@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{%  block body %}
+
+    <div class="container">
+        <br>
+        <h2 style="text-align: center">Edit Quiz - <span class="text-muted display-5">{{ quiz.quiz_id }}</span> </h2>
+        <hr>
+        <br>
+        <br>
+
+     <form method="post" enctype="multipart/form-data" action="{% url 'edit_quiz' quiz.quiz_id %}">
+                    {% csrf_token %}
+
+                    {{ quiz_form.as_p }}
+                    <button type="submit" class="btn-lg btn-info"><i class="fa fa-edit"></i>  Edit</button>
+
+                </form>
+        <hr>
+  </div>
+
+
+
+
+{% endblock %}
