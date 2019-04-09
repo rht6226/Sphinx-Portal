@@ -19,7 +19,7 @@ class Quiz(models.Model):
     instructions = models.TextField(max_length=400)
     quizmaster = models.ForeignKey(User, on_delete=models.CASCADE)
     tags = models.TextField(max_length=2000)
-
+    users_appeared = models.ManyToManyField(User, blank=True, related_name='users_appeared')
     # Automatic info
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(default=now)
