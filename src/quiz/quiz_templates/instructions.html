@@ -63,7 +63,7 @@ color:#5D595D  ;"> <u>{{ quiz_object.quiz_name }}</u></h2>
     </div>
     <div class="col-md-5">
         <div class="container card" style="width: ; padding:28px; margin:45px auto;">
-    <form class="form-signin" method="POST" action="">
+    <form class="form-signin" method="POST" action="{% url 'quiz_auth' quizid=quiz_object.quiz_id %}">
         {% csrf_token %}
         <div class="text-center">
               {{ today.time }}
@@ -77,13 +77,13 @@ color:#5D595D  ;"> <u>{{ quiz_object.quiz_name }}</u></h2>
             <input type="password" id="inputPassword" class="form-control -p3" placeholder="Test-Password" required name="password"><br>
             <br>
 
-            {% if quiz_object.start_time.time <= today.time and margin %}
+{#            {% if quiz_object.start_time.time <= today.time and margin %}#}
 
             <button class="btn btn-lg btn-primary btn-block" type="submit" id="sub">Start Quiz</button>
 
-            {% else %}
-               <button class="btn btn-lg btn-primary btn-block disabled" type="submit" id="sub">Start Quiz</button>
-           {% endif %}
+{#            {% else %}#}
+{#               <button class="btn btn-lg btn-primary btn-block disabled" type="submit" id="sub">Start Quiz</button>#}
+{#           {% endif %}#}
 
 
         </form>

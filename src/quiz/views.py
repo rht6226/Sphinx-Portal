@@ -9,7 +9,31 @@ from django.utils.timezone import datetime, timedelta
 # Create your views here.
 
 
-def conduct_quiz(request):
+def quiz_auth(request, quizid):
+
+    item = Quiz.objects.get(quiz_id=quizid)
+    item.duration = item.duration
+    users = item.users_appeared.filter(pk=request.user.pk)
+
+    if users.exists():
+        messages.info(request, 'You already appeared in this Quiz')
+        return redirect('dashboard')
+    else:
+        if item.quiz_password == request.POST['password']:
+            request.session['username'] = quizid
+            # if request.user.profile.role == 'client':
+            #     item.users_appeared.add(request.user)
+
+            return redirect('test/' + str(quizid))
+        else:
+
+            # return render(request, 'start', {'error': 'Invalid Credentials!'})
+            messages.info(request, 'Invalid Credentials')
+            return redirect('dashboard')
+
+
+def conduct_quiz(request,quizid):
+
     return render(request,'conduct_quiz.html')
 
 
@@ -46,7 +70,13 @@ def register_quiz(request, quizid):
         user = request.user
         tags = quiz_instance.tags
         tags_list = tags.split(';')
+        list_sheet = AnswerSheet.objects.filter(contestant = user).filter(quiz = quiz_instance)
 
+        if list_sheet.exists():
+            flag = 0
+        else:
+            flag = 1
+        print(list_sheet)
         if request.method == 'POST':
             try:
                 # Check if user is already registered for the quiz
@@ -67,7 +97,7 @@ def register_quiz(request, quizid):
 
         # Get the page
         else:
-            context = {'title': 'Register for Quiz', 'quiz': quiz_instance, 'user': user, 'tags': tags_list}
+            context = {'title': 'Register for Quiz', 'quiz': quiz_instance, 'user': user, 'tags': tags_list, 'flag': flag}
 
         return render(request, 'register_quiz.html', context=context)
 

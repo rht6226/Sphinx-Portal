@@ -21,6 +21,7 @@
         </div>
           <br><br><br>
         <div class="text-center">
+            {%  if flag is 1 %}
             <form method="POST" action="{% url 'register_quiz' quiz.quiz_id %}">
                 {% csrf_token %}
                 <div class="custom-control custom-checkbox">
@@ -29,6 +30,11 @@
                 </div>
                 <button class="btn btn-md btn-success" type="submit"><i class="fa fa-plus-circle"></i>  Register</button>
             </form>
+               {% else %}
+                <h3>You have already registered!</h3>
+       <a class="btn btn-md btn-success"  href="{% url 'instructions' quizid=quiz.quiz_id %}"> Click here!</a>
+
+            {% endif %}
         </div>
       </div>
       <div class="card-footer text-muted">
