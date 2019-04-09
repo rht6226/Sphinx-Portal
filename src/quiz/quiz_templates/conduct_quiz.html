@@ -1,55 +1,185 @@
-{% extends 'base.html' %}
-{% block body%}
-{% for obj in quiz_data%}
-                <br>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }} | Sphinx </title>
+        {% include 'base_meta.html' %}
+        {% include 'base_css.html' %}
+        {% include 'base_scripts.html' %}
+    </head>
+    <body>
+        <div class="container">
+            {% include 'messages.html' %}
+        </div>
+        <div class="container">
+        {% for obj in quiz_data%}
 
-                   <li>
-                    <a href="#" id="q{{obj.id}}" style=" margin:0px;"  onclick="quesFetch({{ obj.id }})">{{obj.question|truncatechars:50}}</a>
-                   </li>
+            <div class="card mt-5 mb-3" id="question_{{ obj.id }}">
+              <div class="card-header">
+                  <div class="row justify-content-between">
+                      <div class="col-4">Type - <span class="green-text">{{ obj.get_type_display }}</span></div>
+                      <div class="col-4">Marks Weight <span class="green-text font-weight-bold"> + {{ obj.marks }}</span></div>
+                      {% if obj.negative %}
+                          <div class="col-4">Negative Marking <span class="red-text font-weight-bold"> - {{ obj.negative }}</span></div>
+                      {% endif %}
+                  </div>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title">{{ obj.question }}</h5>
 
-
-
-                    <div id="back_{{ obj.id }}" >
-                <ul class="list-group" style="display:none; padding-top:20px;" id="{{ obj.id }}" >
-                    <li class="list-group-item">{{obj.question}}</li>
-                         {%if obj.image %}
-                    <li class="list-group-item d-flex justify-content-center" >
-                        <img src="{{obj.image}}" class="img-fluid col-9">
-                    </li>
-                    {% endif %}
-                    {%if obj.code %}
-                    <li class="list-group-item">
-                        <code class="col-4">
-                            {{obj.code|linebreaks}}
-                        </code>
-                    </li>
-                    {% endif %}
-                    <form method="POST" action="" name="{{obj.id}}">
-                        {% csrf_token %}
-                    <input type="hidden"  value="{{obj.id}}" name="question_{{obj.id}}">
-                    <li class="list-group-item">
-                        <input class="col-1" type="radio" value="{{obj.a}}" id="optionA" name="response_{{obj.id}}">
-                        <span class='col-11'>{{obj.option_A}}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="col-1" type="radio" value="{{obj.b}}" id="optionB" name="response_{{obj.id}}">
-                        <span class='col-11'>{{obj.option_B}}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="col-1" type="radio" value="{{obj.c}}" id="optionC" name="response_{{obj.id}}">
-                        <span class='col-11'>{{obj.option_C}}</span>
-                    </li>
-                    <li class="list-group-item">
-                        <input class="col-1" type="radio" value="{{obj.d}}" id="optionD" name="response_{{obj.id}}">
-                        <span class='col-11'>{{obj.option_D}}</span>
-                    </li>
-                    <li class="list-group-item" id="recorded_{{obj.id}}" >
-                        <button type="submit" class="btn btn-primary">Submit </button><span></span>
-                    </li>
-                    </form>
-                </ul>
+                {% if obj.image %}
+                    <div class="m-2">
+                        <img src="{{ obj.image.url }}" alt="image not available" class="img-fluid">
                     </div>
-                <br>
-                {% endfor %}
+                {% endif %}
 
-{% endblock %}
+                {% if obj.code %}
+                    <div class="card m-2 mb-3 p-3">
+                    <code>{{ obj.code | linebreaks }}</code>
+                    </div>
+                {% endif %}
+
+          <form method="post" action="{% url 'conduct_quiz' quiz_object.quiz_id %}" name="{{ obj.id }}">
+            {% csrf_token %}
+              <div id="csrf_{{ obj.id }}" csrf="{{ csrf_token }}"></div>
+            <input type="hidden" value="{{ obj.id }}" id="quid_{{ obj.id }}">
+
+            {% if obj.is_subjective %}
+            <!-- For Subjective Questions -->
+            <div id="subjective">
+                <textarea id="textarea_{{ obj.id }}" class="form-control mb-4" placeholder="Your Answer" name="subjective_answer"></textarea>
+            </div>
+            {% endif %}
+
+
+            {% if obj.is_single %}
+            <!-- For Single correct Questions -->
+            <div id="single">
+                <div class="custom-control custom-radio mb-4">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="single_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="single_{{ obj.id }}_option_A">{{ obj.option_A }}</label>
+                </div>
+
+                <div class="custom-control custom-radio mb-4">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="single_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="single_{{ obj.id }}_option_B">{{ obj.option_B }}</label>
+                </div>
+
+                <div class="custom-control custom-radio mb-4">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="single_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="single_{{ obj.id }}_option_C">{{ obj.option_C }}</label>
+                </div>
+
+                <div class="custom-control custom-radio mb-4">
+                    <input type="radio" class="custom-control-input" id="single_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="single_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="single_{{ obj.id }}_option_D">{{ obj.option_D }}</label>
+                </div>
+
+            </div>
+            {% endif %}
+
+
+            {% if obj.is_multiple %}
+            <!-- For Multiple-Choice Multiple-Correct Questions -->
+            <div id="multi">
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_A" value="{{ obj.option_A }}" name="multi_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="multi_{{ obj.id }}_option_A">{{ obj.option_A }}</label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_B" value="{{ obj.option_B }}" name="multi_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="multi_{{ obj.id }}_option_B">{{ obj.option_B }}</label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_C" value="{{ obj.option_C }}" name="multi_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="multi_{{ obj.id }}_option_C">{{ obj.option_C }}</label>
+                </div>
+
+                <div class="custom-control custom-checkbox mb-4">
+                    <input type="checkbox" class="custom-control-input" id="multi_{{ obj.id }}_option_D" value="{{ obj.option_D }}" name="multi_answer_{{ obj.id }}">
+                    <label class="custom-control-label" for="multi_{{ obj.id }}_option_D">{{ obj.option_D }}</label>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="row justify-content-end">
+                <div class="col-2">
+                    <button type="submit" id="submit_question_{{ obj.id }}" class="btn btn-primary btn-md"> Submit </button>
+                </div>
+            </div>
+            </form>
+
+          </div>
+
+              <div class="card-footer">
+                <div class="row justify-content-between">
+                      <div class="col-4">Level - <span class="green-text font-weight-bold">{{ obj.get_level_display }}</span></div>
+                      {% if obj.time_limit != 3600 %}
+                          <div class="col-4">Time Limit <span class="red-text font-weight-bold"> - {{ obj.time_limit }} s</span></div>
+                      {% endif %}
+                      {% if obj.is_subjective %}
+                          <div class="col-4">Maximum Words <span class="red-text font-weight-bold"> - {{ obj.max_words }}</span></div>
+                      {% endif %}
+                </div>
+              </div>
+            </div>
+
+
+        {% endfor %}
+        </div>
+
+    <hr>
+        <p class="text-center">
+            <a class="btn btn-danger btn-lg" href="{% url 'end_test' quiz_object.quiz_id %}" role="button">End Test</a>
+        </p>
+
+    </body>
+
+    <script>
+        {% for obj in quiz_data%}
+            // Event listeners for every form
+            $('form[name ="{{obj.id}}"]').on('submit', function(event){
+                event.preventDefault();
+                console.log("form submitted!")
+                let quid = $('#quid_{{ obj.id }}').val();
+                let text = $('#textarea_{{ obj.id }}').val();
+                let res = $('input[name="single_answer_{{obj.id}}"]:checked').val();
+                //let checked = $('input[name="multi_answer_{{ obj.id }}"]:checked').val();
+
+                let checkboxes = new Array();
+                $('input[name="multi_answer_{{ obj.id }}"]:checked').each(function() {
+                   checkboxes.push($(this).val());
+                });
+
+                let csrf = $('#csrf_{{ obj.id }}').attr('csrf');
+
+                submit(quid, text, res, checkboxes, csrf);
+            });
+        {% endfor %}
+
+        // Function to submit forms asynchronously
+        function submit(quid, text, res, check, csrf) {
+            $.ajax({
+                    url: "{% url 'conduct_quiz' quiz_object.quiz_id %}",
+                    data: {
+                        'question_id': quid,
+                        'subjective_answer': text,
+                        'single_answer': res,
+                        'multi_answer[]': check,
+                        'csrfmiddlewaretoken': csrf
+                    },
+                    type: "post",
+                    cache: false,
+                    beforeSend: function () {
+                        // Anything Before sending data can be done here
+                    },
+                    success: function () {
+                        // Anything to be done after submission can be added here
+                    }
+                });
+        };
+
+    </script>
+
+</html>
