@@ -9,7 +9,7 @@
 
 {% endblock %}
 {% block body %}
-<div class="container">
+<div class="container-fluid">
 
     <div class="flex">
         <a href="{% url 'create_quiz' %}" class="bttn">Start Quiz</a>
@@ -17,7 +17,10 @@
    </div>
 
     <hr>
-<div class="table100 ver2 m-b-110">
+
+    <div class="row justify-content-center">
+    <div class="col-10 m-5">
+    <div class="table100 ver2 m-b-110">
 					<div class="table100-head">
 						<table>
 							<thead>
@@ -28,6 +31,7 @@
 									<th class="cell100 column3">Time</th>
 									<th class="cell100 column4">Quiz-master</th>
 									<th class="cell100 column5">Add</th>
+                                    <th class="cell100 column6">Grade</th>
 								</tr>
 							</thead>
 						</table>
@@ -43,6 +47,7 @@
 									<td class="cell100 column3">{{ obj.quiz_time.time }}</td>
 									<td class="cell100 column4">{{ obj.quizmaster }}</td>
 									<td class="cell100 column5"><a href="{% url 'add_questions' obj.quiz_id  %}">Add More Questions!</a></td>
+                                    <td class="cell100 column6"><a href="{% url 'grader' obj.quiz_id  %}">Grade this Quiz</a></td>
 								</tr>
                               {% endfor %}
 
@@ -51,6 +56,8 @@
 						</table>
 					</div>
 				</div>
+    </div>
+    </div>
 
 </div>
 {% endblock %}

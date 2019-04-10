@@ -1,21 +1,21 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 from django.http import JsonResponse
 from .forms import QuizForm
 from django.contrib import auth, messages
 from django.utils.html import strip_tags
 from django.core.mail import send_mail
-from quiz.models import Quiz, Question
 from django.utils.crypto import get_random_string
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from .models import AnswerSheet, Answer
+from quiz.models import Quiz, Question
 import socket
 import random
 socket.getaddrinfo('localhost', 8000)
 
 
-@login_required(login_url='/accounts/login')
+@login_required(login_url='/login')
 def admin_dash(request):
     if request.user.is_admin():
         item = Quiz.objects.all().order_by('quiz_name')
@@ -112,7 +112,7 @@ def create_quiz_id(size):
         create_quiz_id(size)  # If uid already exists recreate uid
 
 
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='login/')
 def create_quiz(request):
 
     user = request.user
@@ -164,7 +164,7 @@ def create_quiz(request):
 
 
 # Function to edit quiz credentials
-@login_required(login_url='/accounts/login/')
+@login_required(login_url='login/')
 @transaction.atomic()
 def edit_quiz(request, quizid):
     user = request.user
@@ -191,6 +191,29 @@ def edit_quiz(request, quizid):
 
     else:
         return render(request, 'edit_quiz.html', {
+            'title': "Error",
+            'messages': ["Permissions Denied", "Privilege Not Available!"]
+        })
+
+
+# Function to manage AnswerSheet list
+@login_required(login_url='/login')
+def grader(request, quizid):
+    user = request.user
+    quiz_instance = Quiz.objects.get(quiz_id=quizid)
+
+    if user.is_admin():
+
+        sheet_instances = get_list_or_404(AnswerSheet, quiz=quiz_instance, is_attempted=True, is_valid=True)
+
+        return render(request, 'grader.html', {
+            'title': "{} - Grade".format(quiz_instance.quiz_name),
+            'sheets': sheet_instances,
+            'quiz': quiz_instance
+        })
+
+    else:
+        return render(request, 'grader.html', {
             'title': "Error",
             'messages': ["Permissions Denied", "Privilege Not Available!"]
         })
