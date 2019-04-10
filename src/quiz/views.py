@@ -11,7 +11,7 @@ from django.utils.timezone import datetime, timedelta
 # Create your views here.
 
 
-@login_required()
+@login_required(login_url='/login')
 def quiz_auth(request, quizid):
 
     item = Quiz.objects.get(quiz_id=quizid)
@@ -46,6 +46,7 @@ def create_answer_table(quiz_object, question_objects, user_object):
 
 
 # Function for conducting quiz
+@login_required(login_url='/login')
 def conduct_quiz(request, quizid):
 
     aspirant = request.user
@@ -112,7 +113,7 @@ def conduct_quiz(request, quizid):
                                                  'user': aspirant})
 
 
-@login_required()
+@login_required(login_url='/login')
 def instructions(request, quizid):
 
     try:
@@ -137,7 +138,7 @@ def instructions(request, quizid):
         return redirect('dashboard')
 
 
-@login_required()
+@login_required(login_url='/login')
 def register_quiz(request, quizid):
 
     try:

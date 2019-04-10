@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load staticfiles%}
+
+{% block custom_css %}
+    <link rel="stylesheet" href="{% static 'css/button.css' %}">
+    <link rel="stylesheet" href="{% static 'css/table.css' %}">
+{% endblock %}
+
+
+{% block body %}
+    <div class="container">
+
+        <div class="flex">
+            <a href="{% url 'edit_quiz' quiz.quiz_id %}" class="bttn">{{ quiz.quiz_name }}</a>
+        </div>
+
+        <hr>
+
+        <div class="table100 ver2 m-b-110">
+            <div class="table100-head">
+                <table>
+                    <thead>
+
+                        <tr class="row100 head">
+                            <th class="cell100 column1">User</th>
+                            <th class="cell100 column2">End Date</th>
+                            <th class="cell100 column3">End Time</th>
+                            <th class="cell100 column4">Grade</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+            <div class="table100-body js-pscroll">
+                <table>
+                    <tbody>
+                      {% for obj in sheets %}
+                        <tr class="row100 body">
+                            <td class="cell100 column1"><a>{{ obj.contestant }}</a></td>
+                            <td class="cell100 column2">{{ obj.end_time.date }}</td>
+                            <td class="cell100 column3">{{ obj.end_time.time }}</td>
+                            <td class="cell100 column4"><a href="">Grade this Sheet</a></td>
+                        </tr>
+                      {% endfor %}
+
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
