@@ -15,14 +15,17 @@ class AnswerSheet(models.Model):
 
     # Use this flag to register/deregister a user
     is_valid = models.BooleanField(default=True)
-    # USe this flag to check if the candidate has already appeared in the test
+    # Use this flag to check if the candidate has already appeared in the test
     is_attempted = models.BooleanField(default=False)
+    # Use this flag to check if the AnswerSheet has been graded
+    is_graded = models.BooleanField(default=False)
 
     # Marks analysis
     total_marks_obtained = models.IntegerField(blank=True, null=True)
     total_subjective_marks = models.IntegerField(blank=True, null=True)
     total_objective_positive = models.IntegerField(blank=True, null=True)
     total_objective_negative = models.IntegerField(blank=True, null=True)
+    total_marks_available = models.IntegerField(blank=True, null=True)
 
     def __str__(self):
         return "{}-{}".format(self.quiz.quiz_id, self.contestant.username)
@@ -57,6 +60,8 @@ class Answer(models.Model):
 
     # Flag to ensure that an answer cannot be attempted twice
     is_attempted = models.BooleanField(default=False)
+    # Flag to check if the sheet has been graded
+    is_graded = models.BooleanField(default=False)
 
     def __str__(self):
         return "{}-QID-{}-{}".format(self.sheet.quiz.quiz_id, self.question.id, self.sheet.contestant.username)

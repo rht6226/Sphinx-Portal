@@ -55,7 +55,7 @@
              <div class="card-5-border" style="padding-top:7px;text-align: center;background-color:#00ffff;font-size: 2rem;">▌│ 𝕊𝕡𝕙𝕚𝕟𝕩 │ ▌</div>
          </div>
               <div class="col-sm-3">
-                  <div class=" card-5 " style="text-align:center;padding-top:7px;background-color:#00ffff;border-left:7px solid #42d7f4;font-size:2rem;color: black;font-family: 'Cabin sketch', cursive; ">Time : <span id='timer'>{{ quiz_object.duration}}</span></div>
+                  <div class=" card-5 " style="text-align:center;padding-top:7px;background-color:#00ffff;border-left:7px solid #42d7f4;font-size:2rem;color: black;font-family: 'Cabin sketch', cursive; ">Time : <span id='timer'>{{ quiz_object.duration }}</span></div>
 
               </div>
         </div>
@@ -79,7 +79,7 @@
                   </div>
               </div>
               <div class="card-body">
-                <h5 class="card-title">{{ obj.question }}</h5>
+                <h5 class="card-title">{{ obj.question | linebreaks }}</h5>
 
                 {% if obj.image %}
                     <div class="m-2">

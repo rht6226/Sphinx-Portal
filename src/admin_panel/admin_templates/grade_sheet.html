@@ -1,0 +1,238 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{ title }} | Sphinx </title>
+        {% include 'base_meta.html' %}
+        {% include 'base_css.html' %}
+        {% include 'base_scripts.html' %}
+
+        <style>
+            body{
+                background: #e5ffe5;
+            }
+
+            .card-5-border {
+                background: #fff;
+                border-radius: 10px 30px;
+                display: inline-block;
+                height: 80px;
+                margin: 1rem;
+                position: relative;
+                width: 300px;
+                box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+            }
+
+            .card-5 {
+                background: #fff;
+                border-radius:  0px 15px 15px 0px;
+                display: inline-block;
+                height: 80px;
+                margin: 1rem;
+                position: relative;
+                width: 300px;
+                box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22);
+            }
+
+            .slider {
+                -webkit-appearance: none;
+                width: 100%;
+                height: 15px;
+                border-radius: 5px;
+                background: #d3d3d3;
+                outline: none;
+                opacity: 0.7;
+                -webkit-transition: .2s;
+                transition: opacity .2s;
+            }
+
+            .slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+            }
+
+            .slider::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+                border-radius: 50%;
+                background: #4CAF50;
+                cursor: pointer;
+            }
+
+            .slide_container {
+                width: 100%;
+            }
+
+            .slider:hover {
+                opacity: 1;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-9" style="">
+                 <div class="card-5-border" style="padding-top:7px;text-align: center;background-color:#00ffff;font-size: 2rem;">{{ sheet_object.quiz.quiz_name }}</div>
+                </div>
+                <div class="col-sm-3">
+                  <div class=" card-5 " style="text-align:center;padding-top:7px;background-color:#00ffff;border-left:7px solid #42d7f4;font-size:2rem;color: black;font-family: 'Cabin sketch', cursive; "><b>Candidate</b> : {{ sheet_object.contestant }} </div>
+                </div>
+            </div>
+        </div>
+
+         <div class="container" >
+            {% include 'messages.html' %}
+        </div>
+
+
+        <div class="container" id="test1">
+        {% for obj in answers %}
+
+            <div class="card mt-5 mb-3" id="answer_{{ obj.id }}">
+
+              <div class="card-header">
+                  <div class="row justify-content-between">
+                      <div class="col-4">Question Type - <span class="green-text">{{ obj.question.get_type_display }}</span></div>
+                      <div class="col-4">Maximum Marks <span class="green-text font-weight-bold"> + {{ obj.question.marks }}</span></div>
+                      {% if obj.question.negative %}
+                          <div class="col-4">Negative Marking <span class="red-text font-weight-bold"> - {{ obj.question.negative }}</span></div>
+                      {% endif %}
+                  </div>
+              </div>
+
+              <div class="card-body">
+                <h5 class="card-title">{{ obj.question.question | linebreaks }}</h5>
+
+                {% if obj.question.image %}
+                    <div class="m-2">
+                        <img src="{{ obj.question.image.url }}" alt="image not available" class="img-fluid">
+                    </div>
+                {% endif %}
+
+                {% if obj.question.code %}
+                    <div class="card mt-2 mb-1 p-3">
+                    <code>{{ obj.question.code | linebreaks }}</code>
+                    </div>
+                {% endif %}
+
+                {% if obj.question.subjective_answer %}
+                    <div class="p-3 mt-2 mb-1">
+                    <b class="green-text">Correct Answer</b>
+                    <div class="card m-2 p-3 text-muted">
+                    {{ obj.question.subjective_answer | linebreaks }}
+                    </div>
+                    </div>
+                {% endif %}
+
+                <div class="p-3 mt-2 mb-1">
+                    <b class="red-text">User Response</b>
+                    <div class="card m-2 mb-3 p-3">
+                    {{ obj.subjective_answer | linebreaks }}
+                    </div>
+                </div>
+
+          <form method="post" action="{% url 'sheet_grader' sheet_object.id %}" name="{{ obj.id }}">
+            {% csrf_token %}
+              <div id="csrf_{{ obj.id }}" csrf="{{ csrf_token }}"></div>
+
+              <input type="hidden" value="{{ obj.id }}" id="ans_{{ obj.id }}" name="ans_id">
+
+            {% if obj.question.is_subjective %}
+            <div class="p-3 mt-2 mb-1">
+                <b class="font-weight-bold orange-text">Marks Awarded -
+                    <span id="marks_show_{{ obj.id }}"> </span>
+                </b>
+                <div class="slide_container pl-5 pr-5 pt-2 pb-2 m-2">
+                    <input type="range" min="0" max="{{ obj.question.marks }}" value="0" class="slider" id="marks_obtained_{{ obj.id }}" name="marks_given">
+                </div>
+            </div>
+            {% endif %}
+
+
+            <div class="row justify-content-end">
+                <div class="col">
+                    <button  style="float:right" type="submit" id="submit_question_{{ obj.id }}" class="btn btn-primary btn-md"> Submit </button>
+                </div>
+            </div>
+          </form>
+
+          </div>
+
+              <div class="card-footer">
+                <div class="row justify-content-between">
+                      <div class="col-4">Level - <span class="green-text font-weight-bold">{{ obj.question.get_level_display }}</span></div>
+                      {% if obj.question.is_subjective %}
+                          <div class="col-4">Maximum Words <span class="red-text font-weight-bold"> - {{ obj.question.max_words }}</span></div>
+                      {% endif %}
+                </div>
+              </div>
+            </div>
+
+
+        {% endfor %}
+        </div>
+
+    <hr>
+        <p class="text-center">
+
+            <a class="btn btn-danger btn-lg" href="{% url 'finish_grade' sheet_object.id %}" role="button" id="finish_grading">Finalise Grading</a>
+        </p>
+
+    </body>
+
+    <script>
+        // Script for showing the value of the slider
+    </script>
+
+    <script>
+        // Script for AJAX submission
+        {% for obj in answers %}
+            // Event listeners for every form
+            $('form[name ="{{obj.id}}"]').on('submit', function(event){
+                event.preventDefault();
+                console.log("form submitted!")
+                let answer_id = $('#ans_{{ obj.id }}').val();
+                let marks = $('#marks_obtained_{{ obj.id }}').val();
+                let csrf = $('#csrf_{{ obj.id }}').attr('csrf');
+
+                submit(answer_id, marks, csrf);
+            });
+        {% endfor %}
+
+        // Function to submit forms asynchronously
+        function submit(answer_id, marks, csrf) {
+            console.log(answer_id);
+            console.log(marks);
+            console.log(csrf);
+            $.ajax({
+                    url: "{% url 'sheet_grader' sheet_object.id %}",
+                    data: {
+                        ans_id: answer_id,
+                        marks_given: marks,
+                        csrfmiddlewaretoken: csrf,
+                    },
+                    type: "post",
+                    cache: false,
+                    beforeSend: function () {
+                        // Anything Before sending data can be done here
+                    },
+                    success: function () {
+
+                      $("answer_"+ answer_id).remove();
+                      console.log("Submitted Successfully!");
+
+                    }
+                });
+        };
+    </script>
+
+</html>

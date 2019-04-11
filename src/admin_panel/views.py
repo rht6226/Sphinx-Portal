@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_list_or_404
+from django.shortcuts import render, redirect, get_list_or_404, get_object_or_404
 from django.http import JsonResponse
 from .forms import QuizForm
 from django.contrib import auth, messages
@@ -203,17 +203,96 @@ def grader(request, quizid):
     quiz_instance = Quiz.objects.get(quiz_id=quizid)
 
     if user.is_admin():
+        try:
+            sheet_instances = get_list_or_404(AnswerSheet, quiz=quiz_instance, is_attempted=True, is_valid=True,
+                                              is_graded=False)
+            context = {
+                'title': "{} - Grade".format(quiz_instance.quiz_name),
+                'sheets': sheet_instances,
+                'quiz': quiz_instance
+            }
+        except:
+            context = {
+                'title': "{} - Grade".format(quiz_instance.quiz_name),
+                'quiz': quiz_instance,
+                'messages': ['No sheets to grade for this Quiz', 'All Done']
+            }
 
-        sheet_instances = get_list_or_404(AnswerSheet, quiz=quiz_instance, is_attempted=True, is_valid=True)
-
-        return render(request, 'grader.html', {
-            'title': "{} - Grade".format(quiz_instance.quiz_name),
-            'sheets': sheet_instances,
-            'quiz': quiz_instance
-        })
+        return render(request, 'grader.html', context=context)
 
     else:
         return render(request, 'grader.html', {
             'title': "Error",
             'messages': ["Permissions Denied", "Privilege Not Available!"]
         })
+
+
+# Function to grade Subjective Questions
+@login_required(login_url='/login')
+def sheet_grader(request, sheet_id):
+    if request.user.is_admin():
+        sheet = get_object_or_404(AnswerSheet, id=sheet_id)
+        try:
+            answer_list = get_list_or_404(Answer, sheet=sheet, is_graded=False)
+            context = {'title': 'Grade', 'sheet_object': sheet, 'answers': answer_list, }
+
+        except:
+            context = {'title': 'Grade', 'sheet_object': sheet, 'messages': ['All the answers have already been graded',
+                                                                             'Click Finish Grading']}
+
+        if request.method == "POST":
+            answer_id = request.POST.get('ans_id')
+            marks = request.POST.get('marks_given')
+
+            answer_object = Answer.objects.get(id=answer_id)
+            answer_object.marks_awarded = marks
+            answer_object.is_graded = True
+            answer_object.save()
+
+        return render(request, 'grade_sheet.html', context=context)
+
+
+@login_required(login_url='/login')
+def finish_grading(request, sheet_id):
+    if request.user.is_admin():
+
+        try:
+            sheet = get_object_or_404(AnswerSheet, id=sheet_id)
+        except:
+            sheet = None
+
+        if sheet is not None:
+            question_list = get_list_or_404(Question, quiz=sheet.quiz)
+            answer_list = get_list_or_404(Answer, sheet=sheet)
+            total_marks = 0
+            marks_obtained = total_subjective = total_objective_positive = total_objective_negative = 0
+            for question in question_list:
+                total_marks = total_marks + question.marks
+            for answer in answer_list:
+                marks_obtained = marks_obtained + answer.marks_awarded
+                if answer.question.is_subjective:
+                    total_subjective = total_subjective + answer.marks_awarded
+                else:
+                    total_objective_positive = total_objective_positive + (answer.marks_awarded if answer.marks_awarded >= 0 else 0)
+                    total_objective_negative = total_objective_negative + (answer.marks_awarded if answer.marks_awarded < 0 else 0)
+            print(total_objective_positive)
+            print(total_objective_negative)
+            print(total_subjective)
+            sheet.total_marks_available = total_marks
+            sheet.total_marks_obtained = marks_obtained
+            sheet.total_subjective_marks = total_subjective
+            sheet.total_objective_positive = total_objective_positive
+            sheet.total_objective_negative = total_objective_negative
+            sheet.is_graded = True
+            sheet.save()
+
+        messages.info(request, 'Quiz Graded Successfully')
+        return redirect('grader', quizid=sheet.quiz.quiz_id)
+
+    else:
+        messages.info(request, 'Permission Denied')
+        return redirect('dashboard')
+
+
+
+

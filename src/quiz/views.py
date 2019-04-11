@@ -213,15 +213,17 @@ def end_quiz(request, quizid):
     sheet = AnswerSheet.objects.get(quiz=quiz_object, contestant=user)
 
     answer_list = get_list_or_404(Answer, sheet=sheet)
+    subjective_counter = 0
 
     for answer in answer_list:
         question = Question.objects.get(id=answer.question.id)
         if question.is_subjective:
-            pass
+            subjective_counter = subjective_counter+1
         if question.is_single:
             correct_answer = switch_objects(question, question.correct)
             if answer.response_A is not '':
                 answer.marks_awarded = question.marks if correct_answer == answer.response_A else -1*question.negative
+                answer.is_graded = True
                 answer.save()
 
         if question.is_multiple:
@@ -239,10 +241,13 @@ def end_quiz(request, quizid):
             responses.sort()
             if len(responses) != 0:
                 answer.marks_awarded = question.marks if correct_answer == responses else -1*question.negative
+                answer.is_graded = True
                 answer.save()
 
     sheet.end_time = datetime.now()
-    # sheet.is_attempted = True
+    sheet.is_attempted = True
+    if subjective_counter == 0:     # Only Multiple choice questions in the quiz
+        sheet.is_graded = True
     sheet.save()
 
     messages.info(request, 'Your Quiz has been Successfully completed')

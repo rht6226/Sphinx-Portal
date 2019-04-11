@@ -39,7 +39,7 @@
                             <td class="cell100 column1"><a>{{ obj.contestant }}</a></td>
                             <td class="cell100 column2">{{ obj.end_time.date }}</td>
                             <td class="cell100 column3">{{ obj.end_time.time }}</td>
-                            <td class="cell100 column4"><a href="">Grade this Sheet</a></td>
+                            <td class="cell100 column4"><a href="{% url 'sheet_grader' obj.id %}">Grade this Sheet</a></td>
                         </tr>
                       {% endfor %}
 
