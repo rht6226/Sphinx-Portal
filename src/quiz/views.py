@@ -7,6 +7,7 @@ from admin_panel.models import AnswerSheet, Answer
 from django.utils.html import strip_tags
 from datetime import datetime, date
 from django.utils.timezone import datetime, timedelta
+import random
 
 # Create your views here.
 
@@ -51,7 +52,9 @@ def conduct_quiz(request, quizid):
 
     aspirant = request.user
     item = get_object_or_404(Quiz, quiz_id=quizid)
-    data = Question.objects.filter(quiz=item)
+    data = list(Question.objects.filter(quiz=item))
+    random.shuffle(data)
+
     list_sheet = get_object_or_404(AnswerSheet, contestant=aspirant, quiz=item)
 
     # Question Submission
