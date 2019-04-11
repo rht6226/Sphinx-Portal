@@ -2,6 +2,19 @@
 
 ## Notes - For development
 
+#### Features
+1. Registration System(Login/Signup).
+2. Student registration system for quiz.
+3. Separate dashboard for admin and student.
+4. Test can have any pattern of question : Single-correct MCQs,Multi-correct MCQs,Subjective type.
+5. Image field and code field for each question.
+6. Questions come one by one without an option to go back.
+7. Time Limit for each question.
+8. An automated interface to check answers and give marks(MCQs are graded automatically).
+9. A student can only have single session on the website.
+10. Questions are shuffled up for each user.
+
+
 #### Installations
 1. Collect Static files during the first run as their copy in project root is being ignored
 
