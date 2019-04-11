@@ -206,15 +206,30 @@ var pList = div.getElementsByClassName("card");
 
     </script>
 <!--Script(1) ends -->
+
+
 <!--Timer-->
        <script type="text/javascript">
         var forcookie=document.getElementById('forcookie_quizid').innerHTML+document.getElementById('forcookie_user').innerHTML;
+
+
+        if(getCookie(forcookie)){
+            var gross_time=getCookie(forcookie);
+        }
+        else {
+            let gross_time_min = document.getElementById('timer').innerHTML;
+            console.log("gross_time"+gross_time);
+            let gross_time = 60 * gross_time_min;
+        }
+
+        var diff = pList[i].getAttribute('time');
+
         if(getCookie(forcookie)){
             var total_seconds=getCookie(forcookie);
         }
         else {
             var fetch_time = document.getElementById('timer').innerHTML;
-            console.log(fetch_time);
+            console.log("total_seconds"+fetch_time);
             var total_seconds = 60 * fetch_time;
         }
         var hours=parseInt(total_seconds/3600);
@@ -225,6 +240,14 @@ var pList = div.getElementsByClassName("card");
        seconds = seconds < 10 ? "0" + seconds : seconds;
 
         function checkTime(){
+          var ques_id = pList[i].getAttribute('ques_id');
+         console.log(gross_time);
+         console.log(diff);
+         if(gross_time-total_seconds>=diff)
+        {
+            document.getElementById('submit_question_' + ques_id).click();
+
+        }
         document.getElementById('timer').innerHTML=hours +':'+ minutes +':' +seconds;
         if(total_seconds<=0)
         {
@@ -282,52 +305,53 @@ var delete_cookie = function(name) {
 }
 
 
-    var ques_id = pList[i].getAttribute('ques_id');
-    var forcookie_ques = document.getElementById('forcookie_quizid').innerHTML + document.getElementById('forcookie_user').innerHTML + pList[i].getAttribute('id');
-
-
-    if (getCookie(forcookie_ques)) {
-        var total_seconds_ques = getCookie(forcookie_ques);
-    }
-
-    else {
-        var ques_time = pList[i].getAttribute('time');
-        console.log(ques_time);
-        var total_seconds_ques = ques_time;
-    }
-
-    var hours_ques = parseInt(total_seconds_ques / 3600);
-    var minutes_ques = parseInt((total_seconds_ques % 3600) / 60);
-    var seconds_ques = parseInt(total_seconds_ques % 60);
-    hours_ques = hours_ques < 10 ? "0" + hours_ques : hours_ques;
-    minutes_ques = minutes_ques < 10 ? "0" + minutes_ques : minutes_ques;
-    seconds_ques = seconds_ques < 10 ? "0" + seconds_ques : seconds_ques;
-
-    function checkTimeQues() {
-
-        document.getElementById('quesTime_' + ques_id).innerHTML = hours_ques + ':' + minutes_ques + ':' + seconds_ques;
-        if (total_seconds_ques <= 0) {
-
-            document.getElementById('submit_question_' + ques_id).click();
-        }
-        else {
-
-            total_seconds_ques = total_seconds_ques - 1;
-            hours_ques = parseInt(total_seconds_ques / 3600);
-            minutes_ques = parseInt((total_seconds_ques % 3600) / 60);
-            seconds_ques = parseInt(total_seconds_ques % 60);
-            hours_ques = hours_ques < 10 ? "0" + hours_ques : hours_ques;
-            minutes_ques = minutes_ques < 10 ? "0" + minutes_ques : minutes_ques;
-            seconds_ques = seconds_ques < 10 ? "0" + seconds_ques : seconds_ques;
-            setTimeout("checkTimeQues()", 1000);
-
-        }
-        setCookie(forcookie_ques, total_seconds_ques, 1);
-
-    }
-
-
-    setTimeout(checkTimeQues(), 1000);
+    {#var ques_id = pList[i].getAttribute('ques_id');#}
+    {#var forcookie_ques = document.getElementById('forcookie_quizid').innerHTML + document.getElementById('forcookie_user').innerHTML + pList[i].getAttribute('id');#}
+    {##}
+    {##}
+    {#if (getCookie(forcookie_ques)) {#}
+    {#    var total_seconds_ques = getCookie(forcookie_ques);#}
+    {#}#}
+    {##}
+    {#else {#}
+    {#    var ques_time = pList[i].getAttribute('time');#}
+    {#    console.log(ques_time);#}
+    {#    var total_seconds_ques = ques_time;#}
+    {#}#}
+    {##}
+    {#var hours_ques = parseInt(total_seconds_ques / 3600);#}
+    {#var minutes_ques = parseInt((total_seconds_ques % 3600) / 60);#}
+    {#var seconds_ques = parseInt(total_seconds_ques % 60);#}
+    {#hours_ques = hours_ques < 10 ? "0" + hours_ques : hours_ques;#}
+    {#minutes_ques = minutes_ques < 10 ? "0" + minutes_ques : minutes_ques;#}
+    {#seconds_ques = seconds_ques < 10 ? "0" + seconds_ques : seconds_ques;#}
+    {##}
+    {#function checkTimeQues() {#}
+    {##}
+    {#    document.getElementById('quesTime_' + ques_id).innerHTML = hours_ques + ':' + minutes_ques + ':' + seconds_ques;#}
+    {##}
+    {#    if (total_seconds_ques <= 0) {#}
+    {##}
+    {#        document.getElementById('submit_question_' + ques_id).click();#}
+    {#    }#}
+    {#    else {#}
+    {##}
+    {#        total_seconds_ques = total_seconds_ques - 1;#}
+    {#        hours_ques = parseInt(total_seconds_ques / 3600);#}
+    {#        minutes_ques = parseInt((total_seconds_ques % 3600) / 60);#}
+    {#        seconds_ques = parseInt(total_seconds_ques % 60);#}
+    {#        hours_ques = hours_ques < 10 ? "0" + hours_ques : hours_ques;#}
+    {#        minutes_ques = minutes_ques < 10 ? "0" + minutes_ques : minutes_ques;#}
+    {#        seconds_ques = seconds_ques < 10 ? "0" + seconds_ques : seconds_ques;#}
+    {#        setTimeout("checkTimeQues()", 1000);#}
+    {##}
+    {#    }#}
+    {#    setCookie(forcookie_ques, total_seconds_ques, 1);#}
+    {##}
+    {#}#}
+    {##}
+    {##}
+    {#setTimeout("checkTimeQues()", 1000);#}
 
 
     </script>
@@ -335,6 +359,7 @@ var delete_cookie = function(name) {
 
 
     <script>
+
         {% for obj in quiz_data%}
             // Event listeners for every form
             $('form[name ="{{obj.id}}"]').on('submit', function(event){
@@ -383,8 +408,9 @@ var delete_cookie = function(name) {
 
                       //List of card elements
                       pList[i].style.display = "block";
-
-
+                   //Updating time and difference for next question
+                      gross_time = total_seconds;
+                      diff = pList[i].getAttribute('time');
                     }
                 });
         };
