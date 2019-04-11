@@ -7,7 +7,7 @@ class User(AbstractUser):
     registration_number = models.IntegerField(default=201)
     bio = models.TextField(max_length=500, blank=True, default='')
     profile_image = models.ImageField(null=True, blank=True, upload_to='users/')
-
+    flag = models.BooleanField(default=False)
     def get_full_name(self):
         # get the full name of the user
         return self.first_name + ' ' + self.last_name

@@ -10,6 +10,18 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 User = get_user_model()
 
 
+def destroy_prev_session(request):
+    user = User.objects.get(username=request.POST['username'])
+    user.flag = False
+    user.save()
+   # The below line disables the user in order to login properly this must be set back again to true
+
+    user.is_active = False
+    user.save()
+
+    return render(request, 'base.html', {'title': 'HOME'})
+
+
 # Function for the home page
 def home(request):
     if request.user.is_authenticated:
@@ -40,23 +52,38 @@ def login_user(request):
         return redirect('home')
     # POST
     if request.method == 'POST':
-        username = strip_tags(request.POST.get('username'))
-        password = strip_tags(request.POST.get('password'))
-        account = authenticate(username=username, password=password)
+        try:
+            user = User.objects.get(username = request.POST['username'])
+            username = strip_tags(request.POST.get('username'))
+            password = strip_tags(request.POST.get('password'))
 
-        if account is not None:
-            print('user found... \n Now logging in')
-            login(request, account)
-            if request.user.is_admin():
-                return redirect('admin_dashboard')
+            if user.is_active == False:
+                user.is_active = True
+                user.save()
+
+            account = authenticate(username=username, password=password)
+
+            if account is not None:
+                if user.flag == True:
+                    return render(request, 'session_prevent.html', {'userroot': user.username})
+                else:
+                    user.flag=True
+                    user.save()
+                    print('user found... \n Now logging in')
+                    login(request, account)
+                    if request.user.is_admin():
+                        return redirect('admin_dashboard')
+                    else:
+                        return redirect('dashboard')
+
             else:
-                return redirect('dashboard')
-
-        else:
-            print('Non existing user')
-            message = "USER does not exists"
-            context = {'title': 'Login', 'messages': [message]}
-            return render(request, 'login.html', context=context)
+                print('Non existing user')
+                message = "USER does not exists"
+                context = {'title': 'Login', 'messages': [message]}
+                return render(request, 'login.html', context=context)
+        except User.DoesNotExist:
+            return render(request, 'login.html',
+                          {'messages': 'Invalid Credentials! Please enter correct username and password.'})
 
     # GET
     else:
