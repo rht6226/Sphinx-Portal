@@ -217,9 +217,9 @@ var pList = div.getElementsByClassName("card");
             var gross_time=getCookie(forcookie);
         }
         else {
-            let gross_time_min = document.getElementById('timer').innerHTML;
+            var gross_time_min = document.getElementById('timer').innerHTML;
             console.log("gross_time"+gross_time);
-            let gross_time = 60 * gross_time_min;
+            var gross_time = 60 * gross_time_min;
         }
 
         var diff = pList[i].getAttribute('time');

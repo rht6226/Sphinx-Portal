@@ -156,7 +156,6 @@ def start_quiz(request):
             return redirect('dashboard')
 
 
-
 @login_required(login_url='/login')
 def register_quiz(request, quizid):
 

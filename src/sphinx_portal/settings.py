@@ -144,3 +144,5 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'binary.compatible@gmail.com'
 EMAIL_HOST_PASSWORD = 'Bi9ary&Compatible2'
 EMAIL_PORT = 587
+
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

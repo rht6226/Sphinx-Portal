@@ -17,5 +17,6 @@ class QuizForm(forms.ModelForm):
             'quiz_time': forms.DateTimeInput(attrs={'class': 'form-control col-4', 'placeholder': 'YYYY-MM-DD HH:MM'}),
             'duration': forms.TimeInput(attrs={'class': 'form-control col-3', }),
             # 'quiz_id': forms.TextInput(attrs={'class': 'form-control col-6'}),
-            'tags': forms.TextInput(attrs={'class': 'form-control col-6', 'placeholder':'Separate tags with comma(,)'}),
+            'tags': forms.TextInput(attrs={'class': 'form-control col-6',
+                                           'placeholder': 'Separate tags with semicolon (;)'}),
         }

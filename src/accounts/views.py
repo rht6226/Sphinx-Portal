@@ -5,6 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from quiz.models import Quiz
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+import os
+from sphinx_portal import settings
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 # get the user model
 User = get_user_model()
@@ -183,7 +188,16 @@ def edit_profile(request):
 
     if request.method == 'POST':
 
-        if request.FILES.get('image'):
+        if request.FILES.get('image'):  # Delete previous and rename image
+
+            if user_instance.profile_image:     # Delete previous image. Make profile_image None
+                os.remove(os.path.join(settings.MEDIA_ROOT, user_instance.profile_image.name))
+                user_instance.profile_image = None
+                user_instance.save()
+                print('Deleted Previous image. \n Now saving new')
+
+            format_name = request.FILES.get('image').name.split('.')
+            request.FILES.get('image').name = "{}.{}".format(user.username,  format_name[1])    # Rename Uploaded file
             user_instance.profile_image = request.FILES.get('image')
             user_instance.save()
             return redirect('edit_profile')
@@ -202,3 +216,20 @@ def edit_profile(request):
     else:
         return render(request, 'edit_profile.html', context=context)
 
+
+# Change password
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)  # Important!
+            messages.success(request, 'Your password was successfully updated!')
+            return redirect('change_password')
+        else:
+            messages.error(request, 'Please correct the error below.')
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, 'change_password.html', {
+        'form': form, 'title': 'Change Password'
+    })
