@@ -142,10 +142,10 @@ def create_quiz(request):
                 # Save the Quiz object and mail the credentials
                 item.save()
                 send_mail(
-                    'New Quiz Created',
-                    'Here is the message.',
+                    'New Quiz Created:'+item.quiz_name,
+                    'Here are the credentials\n'+'Quiz_id='+item.quiz_id+'\nQuiz_password='+item.quiz_password,
                     'binary.compatible@gmail.com',
-                    ['ojha.ashwini.1998@gmail.com'],
+                    [user.email],
                     fail_silently=True,
                 )
                 return redirect('add_questions/'+item.quiz_id)

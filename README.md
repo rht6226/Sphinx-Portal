@@ -2,8 +2,31 @@
 
 ## Notes - For development
 
+#### Features
+1. Registration System(Login/Signup).
+2. Student registration system for quiz.
+3. Separate dashboard for admin and student.
+4. Test can have any pattern of question : Single-correct MCQs,Multi-correct MCQs,Subjective type.
+5. Image field and code field for each question.
+6. Questions come one by one without an option to go back.
+7. Time Limit for each question.
+8. An automated interface to check answers and give marks(MCQs are graded automatically).
+9. A student can only have single session on the website.
+10. Questions are shuffled up for each user.
+11. A mail with credentials is sent to the quizmaster after creation of quiz.
+
+#### Technology Stack
+* **FRONTEND** : HTML5 , CSS, BOOTSTRAP 4 ,JAVASCRIPT,JQUERY,AJAX
+* **BACKEND** : Django
+
+
 #### Installations
-1. Collect Static files during the first run as their copy in project root is being ignored
+1. pip install requirements.txt
+2. python manage.py makemigrations
+3. python manage.py migrate
+4. python manage.py runserver
+5. visit 127.0.0.1:8000
+**Collect Static files during the first run as their copy in project root is being ignored**
 
 #### Templates
 1. Each App has its own template folder.
