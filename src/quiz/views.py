@@ -142,6 +142,22 @@ def instructions(request, quizid):
 
 
 @login_required(login_url='/login')
+def start_quiz(request):
+    if request.method == 'POST':
+        quizid = request.POST.get('quizid')
+        quiz_instance = Quiz.objects.get(quiz_id=quizid)
+        user = request.user
+        # this is to check if the user has registered or not
+        list_sheet = AnswerSheet.objects.filter(contestant=user).filter(quiz=quiz_instance)
+        if list_sheet.exists():
+            return redirect('instructions/'+quizid)
+        else:
+            messages.info(request, 'You need to register first!')
+            return redirect('dashboard')
+
+
+
+@login_required(login_url='/login')
 def register_quiz(request, quizid):
 
     try:
