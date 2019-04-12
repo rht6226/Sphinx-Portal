@@ -7,7 +7,8 @@ from admin_panel.models import AnswerSheet, Answer
 from django.utils.html import strip_tags
 from datetime import datetime, date
 from django.utils.timezone import datetime, timedelta
-import random
+import pytz
+
 
 # Create your views here.
 
@@ -124,9 +125,13 @@ def instructions(request, quizid):
         user = request.user
         instruct = item.instructions
         instruct_list = instruct.split(";")
+
         today = datetime.now()
         temp = datetime.combine(date.min, today.time()) - datetime.combine(date.min, item.quiz_time.time())
-        print(temp)
+        print(item.quiz_time)
+        print(today)
+        # if(today>item.quiz_time):
+        #      print(0)
         if temp < timedelta(minutes=5):
             print("hola")
             margin = 1

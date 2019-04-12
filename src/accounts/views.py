@@ -99,6 +99,9 @@ def login_user(request):
 # Function to logout the user
 @login_required(login_url='/accounts/login/')
 def logout_user(request):
+    user = request.user
+    user.flag = False
+    user.save()
     logout(request)
     response = redirect('home')
     return response
