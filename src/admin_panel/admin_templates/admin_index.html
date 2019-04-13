@@ -11,7 +11,35 @@
 <div class="container-fluid">
 
     <div class="flex">
-        <a href="{% url 'create_quiz' %}" class="bttn">Start Quiz</a>
+        <a href="" class="bttn" data-toggle="modal" data-target="#myModal">Start Quiz</a>
+                <!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <form class="form-signin"  method="POST" action="{% url 'start_quiz'  %}">
+        {% csrf_token %}
+        <div class="text-center">
+            <img src="{% static 'letter-q.png' %}" width="60" class="d-inline-block align-top">
+
+            <h1 class="h3 mb-3 font-weight-normal">Enter Quiz-id</h1>
+        </div>
+            <label for="quizid">Quiz-Id :</label>
+            <input type="text" id="quizid" class="form-control -p3" placeholder="Enter Quiz-Id" required autofocus name="quizid" ><br>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Start Quiz</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
       <a href="{% url 'create_quiz' %}" class="bttn">Create Quiz</a>
    </div>
 
@@ -53,6 +81,32 @@
 						</table>
 					</div>
 				</div>
+     <div class="row justify-content-center">
+                        <div class="pagination justify-content-center">
+                                <li class="page-item">
+                                    {% if quiz_object.has_previous %}
+                                        <a href="?page=1"  class="btn btn-md btn-info">&laquo; first</a>
+                                        <a href="?page={{ quiz_object.previous_page_number }}" class="btn btn-md btn-info">previous</a>
+                                     {% else %}
+                                        <a href="#"  class=" disabled btn btn-md btn-info">&laquo; first</a>
+                                        <a href="#" class=" disabled btn btn-md btn-info">previous</a>
+                                    {% endif %}
+                                </li>
+                                    <li class="page-item"style="margin:5px">
+                                       <button class="btn" style="color:black;">Page {{ quiz_object.number }} of {{ quiz_object.paginator.num_pages }}</button>
+                                    </li>
+                                  <li class="page-item">
+                                    {% if quiz_object.has_next %}
+                                        <a href="?page={{ quiz_object.next_page_number }}" class="btn btn-md btn-info ">next</a>
+                                        <a href="?page={{ quiz_object.paginator.num_pages }}" class=" btn btn-md btn-info " >last &raquo;</a>
+                                    {% else %}
+                                        <a href="#" class="disabled btn btn-md btn-info ">next</a>
+                                        <a href="#" class="disabled btn btn-md btn-info " >last &raquo;</a>
+                                    {% endif %}
+                                </li class="page-item">
+                            </div>
+
+                    </div>
     </div>
     </div>
 

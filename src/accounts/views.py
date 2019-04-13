@@ -4,6 +4,7 @@ from django.utils.html import strip_tags
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from quiz.models import Quiz
+from admin_panel.models import AnswerSheet
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import os
 from sphinx_portal import settings
@@ -179,6 +180,20 @@ def register(request):
     # GET
     else:
         return render(request, 'register.html', context={'title': 'Register'})
+
+
+
+
+@login_required(login_url='/login/')
+def view_profile(request):
+    user = request.user
+    user_instance = User.objects.get(username=user.username)
+    answer_sheet = AnswerSheet.objects.filter(contestant=user).filter(is_graded=True)
+    upcoming_quizzes = AnswerSheet.objects.filter(contestant=user).filter(is_attempted=False)
+    appeared_quizees = AnswerSheet.objects.filter(contestant=user).filter(is_attempted=True)
+    print(answer_sheet)
+    context = {'title': 'View Profile', 'user': user_instance, "edit_page": "active",'answer_sheet':answer_sheet,'upcoming':upcoming_quizzes,'appeared':appeared_quizees}
+    return render(request, 'view_profile.html', context=context)
 
 
 # Function for editing profile

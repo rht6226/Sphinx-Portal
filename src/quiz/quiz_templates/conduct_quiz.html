@@ -390,7 +390,8 @@ var delete_cookie = function(name) {
                         'subjective_answer': text,
                         'single_answer': res,
                         'multi_answer[]': check,
-                        'csrfmiddlewaretoken': csrf
+                        'csrfmiddlewaretoken': csrf,
+                        'response_time': gross_time-total_seconds,
                     },
                     type: "post",
                     cache: false,
@@ -409,6 +410,7 @@ var delete_cookie = function(name) {
                       //List of card elements
                       pList[i].style.display = "block";
                    //Updating time and difference for next question
+
                       gross_time = total_seconds;
                       diff = pList[i].getAttribute('time');
                     }

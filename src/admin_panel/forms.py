@@ -11,7 +11,7 @@ class QuizForm(forms.ModelForm):
 
         widgets ={
             'description': forms.Textarea(attrs={'class': 'form-control col-8'}),
-            'instructions': forms.Textarea(attrs={'class': 'form-control col-8'}),
+            'instructions': forms.Textarea(attrs={'class': 'form-control col-8', 'placeholder':'Separate instructions with semicolon(;)'}),
             'quiz_name': forms.TextInput(attrs={'class': 'form-control col-6'}),
             # 'quiz_password': forms.TextInput(attrs={'type': 'password', 'class': 'form-control col-6'}),
             'quiz_time': forms.DateTimeInput(attrs={'class': 'form-control col-4', 'placeholder': 'YYYY-MM-DD HH:MM'}),
