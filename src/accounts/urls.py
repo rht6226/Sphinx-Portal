@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import home, login_user, register, logout_user, edit_profile, dash, destroy_prev_session, change_password
+from .views import home, login_user, register, logout_user, edit_profile, dash, destroy_prev_session, change_password, view_profile
 from django.conf.urls.static import static
 from sphinx_portal import settings
 from django.contrib.auth import views as auth_views
@@ -11,6 +11,7 @@ urlpatterns = [
     path(r'logout', logout_user, name='logout'),
     path(r'register', register, name='register'),
     path(r'edit_profile', edit_profile, name='edit_profile'),
+    path(r'view_profile', view_profile, name='view_profile'),
     path('login/remove_session', destroy_prev_session, name='destroy_prev_session'),
     path(r'password', change_password, name='change_password'),
 

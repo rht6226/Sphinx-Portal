@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block custom_css %}
+       <link rel="stylesheet" href="{% static 'css/table.css' %}">
+
+    <style>
+        .card.card-cascade .view.gradient-card-header {
+            padding: 1.1rem 1rem;
+        }
+        .card.card-cascade .view {
+            box-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19);
+        }
+        .uploader:hover {
+            border: 20px;
+            border-radius: 20%;
+        }
+    </style>
+{% endblock %}
+
+{% if user.is_authenticated %}
+
+{% block body %}
+    <br><br><br>
+    <main>
+        <div class="container-fluid">
+
+            <!-- Section: Edit Account -->
+            <section class="section">
+                <!-- First row -->
+                <div class="row h-75">
+                    <!-- First column -->
+                    <div class="col-sm-3 mb-4">
+
+                        <!--Card-->
+                        <div class="card card-cascade narrower">
+
+                            <!--Card image-->
+                            <div class="view view-cascade gradient-card-header mdb-color lighten-3">
+                                <h5 class="mb-0 font-weight-bold">My profile</h5>
+                            </div>
+                            <!--/Card image-->
+
+                            <!-- Card content -->
+                            <div class="card-body card-body-cascade text-center">
+                                <img src="{{ user.image_url }}" alt="User Photo" class="img img-fluid img-thumbnail z-depth-1 mb-2 mx-auto uploader" >
+
+                                   <div class="row flex-center"><h3> {{ user.first_name }} {{ user.last_name }} </h3></div>
+                                    <hr>
+                                   <div class="row flex-center"> <strong>Username:</strong>{{ user.username }}</div>
+                                    <hr>
+                                   <div class="row flex-center"><strong>E-mail:</strong>{{ user.email }} </div>
+                                    <hr>
+                                   <div class="row flex-center"><strong>Reg.No:</strong>{{ user.registration_number }} </div>
+
+                                </div>
+                            <div class="card-footer">{{ user.bio }} </div>
+                            <br>
+                            </div>
+                            <!-- /.Card content -->
+
+                        </div>
+                    <div class="col-sm-8">
+
+                             <nav>
+                  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Activity Report</a>
+                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Upcoming Quizzes</a>
+                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Appeared Quizzes</a>
+                  </div>
+                </nav>
+                <div class="tab-content" id="nav-tabContent">
+                  <div class="tab-pane justify-content-center fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                      <h2 class="text-center display-2 m-2">Analysis</h2>
+                      <div id="top_x_div" class="text-center" style="width: 100%; height:100%;"></div>
+                  </div>
+                  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                      <br>
+                      <br>
+            <div class="table100 ver2 m-b-110">
+                                <div class="table100-head">
+                                    <table>
+                                        <thead>
+
+                                            <tr class="row100 head">
+                                                <th class="cell100 column1">Quiz</th>
+                                                <th class="cell100 column2">Date</th>
+                                                <th class="cell100 column3">Time</th>
+                                                <th class="cell100 column4">Quizmaster</th>
+                                                <th class="cell100 column5">Start</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div class="table100-body js-pscroll">
+                                    <table>
+                                        <tbody>
+                                          {% for obj in upcoming %}
+                                            <tr class="row100 body">
+                                                <td class="cell100 column1">{{ obj.quiz.quiz_name }}</td>
+                                                <td class="cell100 column2">{{ obj.quiz.quiz_time.date }}</td>
+                                                <td class="cell100 column3">{{ obj.quiz.quiz_time.time }}</td>
+                                                <td class="cell100 column4">{{ obj.quiz.quizmaster }}</td>
+
+                                                <td class="cell100 column5"><a href="{% url 'instructions' obj.quiz.quiz_id  %}">Click!</a></td>
+                                            </tr>
+                                          {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+				</div>
+
+                  </div>
+                  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                       <br>
+                      <br>
+            <div class="table100 ver2 m-b-110">
+                                <div class="table100-head">
+                                    <table>
+                                        <thead>
+
+                                            <tr class="row100 head">
+                                                <th class="cell100 column1">Quiz</th>
+                                                <th class="cell100 column2">Date</th>
+                                                <th class="cell100 column3">Time</th>
+                                                <th class="cell100 column4">Quizmaster</th>
+                                                <th class="cell100 column5">Report</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+
+                                <div class="table100-body js-pscroll">
+                                    <table>
+                                        <tbody>
+                                          {% for obj in appeared %}
+                                            <tr class="row100 body">
+                                                <td class="cell100 column1">{{ obj.quiz.quiz_name }}</td>
+                                                <td class="cell100 column2">{{ obj.quiz.quiz_time.date }}</td>
+                                                <td class="cell100 column3">{{ obj.quiz.quiz_time.time }}</td>
+                                                <td class="cell100 column4">{{ obj.quiz.quizmaster }}</td>
+
+                                                <td class="cell100 column5"><a href="{% url 'instructions' obj.quiz.quiz_id  %}">Check!</a></td>
+                                            </tr>
+                                          {% endfor %}
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+
+				</div>
+
+                  </div>
+                </div>
+                    </div>
+
+
+
+
+                </div>
+            </section>
+
+
+{% endblock %}
+ {%  block custom_script %}
+
+{#     <script>#}
+{##}
+{#     {% for obj in quiz_data%}#}
+{#            // Event listeners for every form#}
+{#            $('form[name ="{{obj.id}}"]').on('submit', function(event){#}
+{#                event.preventDefault();#}
+{#                console.log("form submitted!")#}
+{#                let quid = $('#quid_{{ obj.id }}').val();#}
+{#                let text = $('#textarea_{{ obj.id }}').val();#}
+{#                let res = $('input[name="single_answer_{{obj.id}}"]:checked').val();#}
+{#                //let checked = $('input[name="multi_answer_{{ obj.id }}"]:checked').val();#}
+{##}
+{#                let checkboxes = new Array();#}
+{#                $('input[name="multi_answer_{{ obj.id }}"]:checked').each(function() {#}
+{#                   checkboxes.push($(this).val());#}
+{#                });#}
+{##}
+{#                let csrf = $('#csrf_{{ obj.id }}').attr('csrf');#}
+{##}
+{#                submit(quid, text, res, checkboxes, csrf);#}
+{#            });#}
+{#        {% endfor %}#}
+{#  // Function to submit forms asynchronously#}
+{#        function submit(quid, text, res, check, csrf) {#}
+{#            $.ajax({#}
+{#                    url: "{% url 'get_report' quiz_object.quiz_id %}",#}
+{#                    data: {#}
+{#                        'question_id': quid,#}
+{#                        'subjective_answer': text,#}
+{#                        'single_answer': res,#}
+{#                        'multi_answer[]': check,#}
+{#                        'csrfmiddlewaretoken': csrf,#}
+{#                        'response_time': gross_time-total_seconds,#}
+{#                    },#}
+{#                    type: "post",#}
+{#                    cache: false,#}
+{#                    beforeSend: function () {#}
+{#                        // Anything Before sending data can be done here#}
+{#                    },#}
+{#                    success: function () {#}
+{#                        #}
+{#                    }#}
+{#                });#}
+{#        };#}
+{##}
+{##}
+{#     </script>#}
+
+
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['bar']});
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+         ['Quiz_Name', 'Obtained','Total'],
+        {% for sheets in answer_sheet %}
+
+          ["{{sheets.quiz.quiz_name}}",{{sheets.total_marks_obtained}},{{sheets.total_marks_available}}],
+
+          {% endfor %}
+        ]);
+
+        var options = {
+          width: 800,
+          legend: { position: 'none' },
+          chart: {
+             },
+          axes: {
+          x: {
+              0: { side: 'top', label: 'Quiz_name'} // Top x-axis.
+            }
+
+          },
+          bar: { groupWidth: "90%" }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+        // Convert the Classic options to Material options.
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      };
+    </script>
+    {% endblock %}
+ {% endif %}
