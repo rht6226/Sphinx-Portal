@@ -8,6 +8,8 @@ from django.utils.html import strip_tags
 from datetime import datetime, date
 from django.utils.timezone import datetime, timedelta
 import random
+import pytz
+utc = pytz.UTC
 
 
 # Create your views here.
@@ -19,22 +21,32 @@ def quiz_auth(request, quizid):
     item = Quiz.objects.get(quiz_id=quizid)
     item.duration = item.duration
     users = item.users_appeared.filter(pk=request.user.pk)
+    start_time = item.quiz_time
+    today = datetime.now()
+    print(today.tzinfo)
+    print(start_time)
+    print(today)
+    if(today >start_time ):
 
-    if users.exists():
-        messages.info(request, 'You already appeared in this Quiz')
-        return redirect('dashboard')
-    else:
-        if item.quiz_password == request.POST['password']:
-            request.session['username'] = quizid
-            # if request.user.profile.role == 'client':
-            #     item.users_appeared.add(request.user)
-
-            return redirect('test/' + str(quizid))
-        else:
-
-            # return render(request, 'start', {'error': 'Invalid Credentials!'})
-            messages.info(request, 'Invalid Credentials')
+        if users.exists():
+            messages.info(request, 'You already appeared in this Quiz')
             return redirect('dashboard')
+        else:
+            if item.quiz_password == request.POST['password']:
+                request.session['username'] = quizid
+                # if request.user.profile.role == 'client':
+                #     item.users_appeared.add(request.user)
+
+                return redirect('test/' + str(quizid))
+            else:
+
+                # return render(request, 'start', {'error': 'Invalid Credentials!'})
+                messages.info(request, 'Invalid Credentials')
+                return redirect('dashboard')
+    else:
+        messages.info(request, "You can't start now!")
+        return redirect('dashboard')
+
 
 
 def create_answer_table(quiz_object, question_objects, user_object):
