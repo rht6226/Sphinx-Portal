@@ -46,8 +46,8 @@ class Answer(models.Model):
     marks_awarded = models.IntegerField(default=0)
 
     # Question wise time
-    start_time = models.DateTimeField(null=True, blank=True)
-    end_time = models.DateTimeField(null=True, blank=True)
+    response_time = models.IntegerField(default=0)
+
 
     # Subjective
     subjective_answer = models.TextField(null=True, blank=True, default='')
