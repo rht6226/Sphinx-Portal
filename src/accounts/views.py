@@ -27,7 +27,7 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
     else:
-        return render(request, 'base.html', {'title': 'HOME'})
+        return render(request, 'home.html', {'title': 'HOME'})
 
 
 @login_required(login_url='/accounts/login')
