@@ -10,6 +10,10 @@
         .card.card-cascade .view {
             box-shadow: 0 5px 12px 0 rgba(0, 0, 0, 0.2), 0 2px 8px 0 rgba(0, 0, 0, 0.19);
         }
+        .uploader:hover {
+            border: 20px;
+            border-radius: 20%;
+        }
     </style>
 {% endblock %}
 
@@ -38,12 +42,12 @@
 
                             <!-- Card content -->
                             <div class="card-body card-body-cascade text-center">
-                                <img src="{{ user.image_url }}" alt="User Photo" class="img img-fluid img-thumbnail z-depth-1 mb-3 mx-auto" onclick="document.getElementById('my_file').click()">
+                                <img src="{{ user.image_url }}" alt="User Photo" class="img img-fluid img-thumbnail z-depth-1 mb-3 mx-auto uploader" onclick="document.getElementById('my_file').click()">
                                  <p class="text-muted"><small>Click Image to upload photo</small></p>
                                 <div class="row flex-center">
                                     <form method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}">
                                         {% csrf_token %}
-                                        <input type="file" id="my_file" style="display: none;" name="image">
+                                        <input type="file" id="my_file" style="display: none;" name="image" required>
                                         <button  type="submit"  class="btn btn-info btn-rounded btn-sm">Upload Photo</button>
                                     </form>
                                 </div>
@@ -88,7 +92,7 @@
                                         </div>
                                         <!--Third column-->
                                         <div class="col-md-3">
-                                            <a class="btn-floating btn-sm btn-outline-cyan"><i class="fa fa-edit"></i> password</a>
+                                            <a class="btn-floating btn-sm btn-outline-cyan" href="{% url 'change_password' %}"><i class="fa fa-edit"></i> password</a>
                                         </div>
                                     </div>
                                     <!--First row-->

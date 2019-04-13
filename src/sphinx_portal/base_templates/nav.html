@@ -17,12 +17,19 @@
 
     <ul class="navbar-nav ml-auto">
 
+    <li class="nav-item">
+        <a class="nav-link nav-item font-weight-bold" href={% url 'general_board' %}>LeaderBoards</a>
+    </li>
+
     {% if user.is_authenticated %}
         <li class="nav-item dropdown">
             <a class="nav-link nav-item dropdown-toggle font-weight-bold" href="#" id="navbarDropdown" role="button" data-toggle="dropdown">
                 {{user.first_name}} {{user.last_name}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item nav-link nav-item text-primary" href="{% url 'edit_profile' %}">
+                    <i class="fa fa-edit"></i>  Edit Profile
+                </a>
                 <a class="dropdown-item nav-link nav-item text-primary" href="javascript:{document.getElementById('logout').submit()}">
                     <i class="fa fa-lock"></i>  Log Out
                 </a>

@@ -294,5 +294,16 @@ def finish_grading(request, sheet_id):
         return redirect('dashboard')
 
 
+# Function for LeaderBoard of each Quiz
+def quiz_leader_board(request, quiz_id):
+    quiz_object = get_object_or_404(Quiz, quiz_id=quiz_id)
+    sheet_list = get_list_or_404(AnswerSheet.objects.order_by('-total_marks_obtained'), quiz=quiz_object, is_graded=True)
+    context = {'title': 'LeaderBoards', 'quiz': quiz_object, 'leader_data': sheet_list}
+    return render(request, 'quiz_leader_board.html', context=context)
 
 
+# Function for Showing all quiz
+def leader_board(request):
+    quiz_list = get_list_or_404(Quiz.objects.order_by('-quiz_time'), is_active=True)
+    context = {'title': 'LeaderBoards', 'leader_data': quiz_list}
+    return render(request, 'LeaderBoard.html', context=context)

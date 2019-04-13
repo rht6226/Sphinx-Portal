@@ -7,7 +7,8 @@ from admin_panel.models import AnswerSheet, Answer
 from django.utils.html import strip_tags
 from datetime import datetime, date
 from django.utils.timezone import datetime, timedelta
-import random
+import pytz
+
 
 # Create your views here.
 
@@ -124,9 +125,13 @@ def instructions(request, quizid):
         user = request.user
         instruct = item.instructions
         instruct_list = instruct.split(";")
+
         today = datetime.now()
         temp = datetime.combine(date.min, today.time()) - datetime.combine(date.min, item.quiz_time.time())
-        print(temp)
+        print(item.quiz_time)
+        print(today)
+        # if(today>item.quiz_time):
+        #      print(0)
         if temp < timedelta(minutes=5):
             print("hola")
             margin = 1
@@ -139,6 +144,21 @@ def instructions(request, quizid):
     except Quiz.DoesNotExist:
         messages.info(request, 'Quiz does not exists!')
         return redirect('dashboard')
+
+
+@login_required(login_url='/login')
+def start_quiz(request):
+    if request.method == 'POST':
+        quizid = request.POST.get('quizid')
+        quiz_instance = Quiz.objects.get(quiz_id=quizid)
+        user = request.user
+        # this is to check if the user has registered or not
+        list_sheet = AnswerSheet.objects.filter(contestant=user).filter(quiz=quiz_instance)
+        if list_sheet.exists():
+            return redirect('instructions/'+quizid)
+        else:
+            messages.info(request, 'You need to register first!')
+            return redirect('dashboard')
 
 
 @login_required(login_url='/login')
