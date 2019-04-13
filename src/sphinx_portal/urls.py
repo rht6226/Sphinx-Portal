@@ -17,10 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from . import settings
+from admin_panel.views import quiz_leader_board, leader_board
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('accounts.urls')),
     path('super/', include('admin_panel.urls')),
-    path('quiz/', include('quiz.urls'))
+    path('quiz/', include('quiz.urls')),
+    path('leaderboard/', leader_board, name='general_board'),
+    path('leaderboard/<slug:quiz_id>', quiz_leader_board, name='quiz_board'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

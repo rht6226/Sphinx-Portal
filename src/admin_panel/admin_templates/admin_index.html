@@ -1,11 +1,10 @@
-{% extends 'base.html' %}
+{% extends 'base_dash.html' %}
 {% load staticfiles %}
 {% block custom_css %}
 
 
    <link rel="stylesheet" href="{% static 'css/button.css' %}">
    <link rel="stylesheet" href="{% static 'css/table.css' %}">
-
 
 {% endblock %}
 {% block body %}
@@ -47,7 +46,7 @@
     <hr>
 
     <div class="row justify-content-center">
-    <div class="col-10 m-5">
+    <div class="col-lg-8  col-sm-11 col-md-8 m-5">
     <div class="table100 ver2 m-b-110">
 					<div class="table100-head">
 						<table>
@@ -56,10 +55,9 @@
 								<tr class="row100 head">
 									<th class="cell100 column1">Quiz</th>
 									<th class="cell100 column2">Date</th>
-									<th class="cell100 column3">Time</th>
 									<th class="cell100 column4">Quiz-master</th>
 									<th class="cell100 column5">Add</th>
-                                    <th class="cell100 column6">Grade</th>
+                                    <th class="cell100 column3">Grade</th>
 								</tr>
 							</thead>
 						</table>
@@ -72,10 +70,9 @@
 								<tr class="row100 body">
                                     <td class="cell100 column1"><a href="{% url 'edit_quiz' obj.quiz_id  %}">{{ obj.quiz_name }}</a></td>
 									<td class="cell100 column2">{{ obj.quiz_time.date }}</td>
-									<td class="cell100 column3">{{ obj.quiz_time.time }}</td>
 									<td class="cell100 column4">{{ obj.quizmaster }}</td>
 									<td class="cell100 column5"><a href="{% url 'add_questions' obj.quiz_id  %}">Add More Questions!</a></td>
-                                    <td class="cell100 column6"><a href="{% url 'grader' obj.quiz_id  %}">Grade this Quiz</a></td>
+                                    <td class="cell100 column3"><a href="{% url 'grader' obj.quiz_id  %}">Grade this Quiz</a></td>
 								</tr>
                               {% endfor %}
 
@@ -116,3 +113,6 @@
 </div>
 {% endblock %}
 
+{% block custom_script %}
+
+{% endblock %}
