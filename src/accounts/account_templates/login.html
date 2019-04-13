@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block  body %}
 
 <div class="row m-5 p-4 justify-content-center">
-<div class="col-4">
+<div class="col-lg-4 col-md-4 col-sm-7">
     <!-- Login Form -->
 <form class="text-center border border-light p-5" method="post" action="{% url 'login' %}">
     {% csrf_token %}
+    <div class="row justify-content-center">
+        <img src="{% static 'sphinx.svg' %}" class="image img-fluid figure-img">
+    </div>
     <p class="h4 mb-4">Sign in</p>
 
     <!-- Username -->

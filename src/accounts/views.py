@@ -19,8 +19,7 @@ def destroy_prev_session(request):
     user = User.objects.get(username=request.POST['username'])
     user.flag = False
     user.save()
-   # The below line disables the user in order to login properly this must be set back again to true
-
+    # The below line disables the user in order to login properly this must be set back again to true
     user.is_active = False
     user.save()
 
@@ -30,7 +29,7 @@ def destroy_prev_session(request):
 # Function for the home page
 def home(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('dashboard') if not request.user.is_admin() else redirect('admin_dashboard')
     else:
         return render(request, 'base.html', {'title': 'HOME'})
 
