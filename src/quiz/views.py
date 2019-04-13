@@ -8,6 +8,7 @@ from django.utils.html import strip_tags
 from datetime import datetime, date
 from django.utils.timezone import datetime, timedelta
 import pytz
+import random
 
 
 # Create your views here.

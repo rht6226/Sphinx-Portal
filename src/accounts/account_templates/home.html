@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load static %}
+
+{% block custom_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+.hovereffect {
+    width: 100%;
+    height: 100%;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    cursor: default;
+}
+.hovereffect .overlay {
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    left: 0;
+	top: auto;
+	bottom: 0;
+	padding: 1em;
+	height: 4.75em;
+	background: #79FAC4;
+	color: #3c4a50;
+	-webkit-transition: -webkit-transform 0.35s;
+	transition: transform 0.35s;
+	-webkit-transform: translate3d(0,100%,0);
+	transform: translate3d(0,100%,0);
+	visibility: hidden;
+
+}
+
+.hovereffect img {
+    display: block;
+    position: relative;
+	-webkit-transition: -webkit-transform 0.35s;
+	transition: transform 0.35s;
+}
+
+.hovereffect:hover img {
+-webkit-transform: translate3d(0,-10%,0);
+	transform: translate3d(0,-10%,0);
+}
+
+.hovereffect h2 {
+    text-transform: uppercase;
+    color: #fff;
+    text-align: center;
+    position: relative;
+    font-size: 17px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.6);
+	float: left;
+	margin: 0px;
+	display: inline-block;
+}
+
+.hovereffect a.info {
+    display: inline-block;
+    text-decoration: none;
+    padding: 7px 14px;
+    text-transform: uppercase;
+	color: #fff;
+	border: 1px solid #fff;
+	margin: 50px 0 0 0;
+	background-color: transparent;
+}
+.hovereffect a.info:hover {
+    box-shadow: 0 0 5px #fff;
+}
+
+
+.hovereffect p.icon-links a {
+	float: right;
+	color: #3c4a50;
+	font-size: 1.4em;
+}
+
+.hovereffect:hover p.icon-links a:hover,
+.hovereffect:hover p.icon-links a:focus {
+	color: #252d31;
+}
+
+.hovereffect h2,
+.hovereffect p.icon-links a {
+	-webkit-transition: -webkit-transform 0.35s;
+	transition: transform 0.35s;
+	-webkit-transform: translate3d(0,200%,0);
+	transform: translate3d(0,200%,0);
+	visibility: visible;
+}
+
+.hovereffect p.icon-links a span:before {
+	display: inline-block;
+	padding: 8px 10px;
+	speak: none;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+
+.hovereffect:hover .overlay,
+.hovereffect:hover h2,
+.hovereffect:hover p.icon-links a {
+	-webkit-transform: translate3d(0,0,0);
+	transform: translate3d(0,0,0);
+}
+
+.hovereffect:hover h2 {
+	-webkit-transition-delay: 0.05s;
+	transition-delay: 0.05s;
+}
+
+.hovereffect:hover p.icon-links a:nth-child(3) {
+	-webkit-transition-delay: 0.1s;
+	transition-delay: 0.1s;
+}
+
+.hovereffect:hover p.icon-links a:nth-child(2) {
+	-webkit-transition-delay: 0.15s;
+	transition-delay: 0.15s;
+}
+
+.hovereffect:hover p.icon-links a:first-child {
+	-webkit-transition-delay: 0.2s;
+	transition-delay: 0.2s;
+}
+</style>
+
+
+{% endblock %}
+{% block body %}
+<br>
+<div class=" row ">
+<div class="col-6 animated fadeInLeft" style="background-color: #1EAFE7; font-family:'Old English Text MT'; border-radius:8px; animation-duration:2s;">
+    <div class="row">
+        <div class="col-6 justify-content-center pt-5">
+        <img src="{% static 'sphinx.svg' %}" class="image img-fluid figure-img">
+    </div>
+    <div class="col-6">
+        <center>
+   <h1 style="font-family:Showcard Gothic; text-shadow:2px 2px 8px #black; color: white;">S<br><br>P<br><br>H<br><br>I<br><br>N<br><br>X </h1>
+   </center>
+    </div>
+    </div>
+</div>
+ <div class="col-1"   >
+
+
+
+
+ </div>
+
+<div class="col-4 animated fadeInRight p-5" style="animation-duration:2s;"> 
+
+      <font style="font-size:23px; font-family:'Comic Sans MS';">  Hola a todos !!<br>
+
+        Sphinx, the mythical creature is back with another exciting edition !!
+
+        Get ready for a fun-filled ride in this amazing voyage to the world of puzzles where your mind will be refreshed. Take up a quiz or CREATE ONE OF YOUR OWN!!
+
+        Let the quest for the throne begin.👑</font>
+        
+
+</div>
+</div>
+<br>
+<br>
+<br>
+<div class="row">
+<div class="col-1">
+
+
+</div>
+<div class="col-2" style="background-color:#1EAFE7; border-radius:8px">
+<font style="color:white; font-size:36px; background-color:#1EAFE7; font-family:Comic Sans MS; border-radius:8px">Why should you make a quiz?</font>
+</div>
+<div class="col-1">
+</div>
+<div class="col-5">
+
+
+<font style="font-family:Lucida Sans; font-size:20px">One word: growth. Personal or professional growth—teachers or trainers helping people with new knowledge and skills.
+
+An online quiz maker is a useful tool for facilitating both kinds of growth.
+
+Teachers and trainers can create a quiz to make lessons more interactive and engaging. It’s been researched and proven that regular quizzes—boost memory retention, drive engagement, and make learning fun. More on this in a bit.</font>
+</div>
+</div>
+<br>
+<br>
+<div class="row">
+    <div class="col-1">
+    </div>
+    <div class="col-5">
+    <font style="font-family:Lucida Sans; font-size:20px">Besides quizzes can be conducted for different age groups and over varying cultures, quizzes improve or expanding one’s knowledge of things, either general or in specific area.
+    Quizzes are designed to promote, a fun way to study and in the process help improve one’s general knowledge.
+    Quiz competitions enables students to think from different angles or simply ‘to think out of the box’<br><br>So Start EXPLORING and Get Yourself STARTED</font>
+    </div>
+    <div class="col-1">
+    </div>
+    <div class="col-2" style="background-color:#1EAFE7; border-radius:8px">
+    <font style="color:white; font-size:36px; background-color:#1EAFE7; font-family:Comic Sans MS; border-radius:8px">Why should you take a quiz?</font>
+    </div>
+
+</div>
+<br>
+<br>
+<br>
+<hr>
+<br>
+<br>
+<center>
+<div class=" col-11" style="border-style:double; border-color:#1EAFE7; border-radius:8px">
+<center><h2 style="font-family:'Copperplate Gothic Light'">OUR TEAM</h2></center>
+<div class="row">
+
+<div class="col-4">
+    <div class="hovereffect">
+        <img class="img-responsive img-fluid img-thumbnail" src="{% static 'home-img/IMG_20180322_001404321.jpg' %}" alt="" height="250" width="250">
+            <div class="overlay">
+                <h2>ASHWINI OJHA</h2>
+                <p class="icon-links">
+                    <a href="#">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-instagram"></span>
+                    </a>
+                </p>
+            </div>
+    </div>
+</div>
+<div class="col-4">
+    <div class="hovereffect">
+        <img class="img-responsive img-fluid img-thumbnail" src="{% static 'home-img/IMG_20180317_134251472.jpg' %}" alt="" height="250" width="250">
+            <div class="overlay">
+                <h2>ROHIT RAJ ANAND</h2>
+                <p class="icon-links">
+                    <a href="#">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-instagram"></span>
+                    </a>
+                </p>
+            </div>
+    </div>
+</div>
+<div class="col-4">
+    <div class="hovereffect">
+        <img class="img-responsive img-fluid img-thumbnail" src="{% static 'home-img/2013-02-11 15.45.12-1.jpg' %}" alt="" height="250" width="250">
+            <div class="overlay">
+                <h2>SHEETAL SINGH</h2>
+                <p class="icon-links">
+                    <a href="#">
+                        <span class="fa fa-twitter"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-facebook"></span>
+                    </a>
+                    <a href="#">
+                        <span class="fa fa-instagram"></span>
+                    </a>
+                </p>
+            </div>
+    </div>
+</div>
+
+
+
+</div>
+</center>
+<br>
+<br>
+{% include 'footer.html' %}
+{% endblock %}
